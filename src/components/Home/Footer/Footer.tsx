@@ -30,7 +30,7 @@ const Footer = () => {
       </footer>
       <footer
         style={{
-          backgroundImage: "url('/src/assets/banner.svg')",
+          backgroundImage: "url('/assets/banner.svg')",
         }}
         className=" footer hero  footer-center h-full w-full bg-cover bg-center bg-no-repeat  text-white  "
       >

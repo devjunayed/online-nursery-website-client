@@ -6,11 +6,11 @@ import Footer from "../components/Home/Footer/Footer";
 const MainLayout = () => {
   return (
     <div className="bg-white">
-      <Header />
       <Container>
+        <Header />
+
         <Outlet />
-      </Container>
-      <Container>
+
         <Footer />
       </Container>
     </div>

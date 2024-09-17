@@ -5,7 +5,7 @@ const Banner = () => {
     <div
       className="hero min-h-[70vh] relative my-10"
       style={{
-        backgroundImage: "url('/src/assets/banner.svg')",
+        backgroundImage: "url('/assets/banner.svg')",
       }}
     >
       <div className="hero-content  text-black-content text-center">
