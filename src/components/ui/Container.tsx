@@ -2,7 +2,7 @@ import { ReactNode } from "react"
 
 const Container = ({children}: {children: ReactNode}) => {
   return (
-    <div className="flex max-w-[90vw] mx-auto">
+    <div className="max-w-[90vw] mx-auto">
         {children}
     </div>
   )
