@@ -16,6 +16,10 @@ const Navbar = () => {
       path: "/products",
       text: "Products",
     },
+    {
+      path: "/dashboard",
+      text: "Dashboard",
+    },
   ];
 
   const [menu, setMenu] = useState(false);
@@ -27,7 +31,7 @@ const Navbar = () => {
   return (
     <>
       <div className="relative navbar rounded px-6 bg-[#60A83B] uppercase text-white">
-        <div className="navbar-start">
+        <div className="navbar-start w-full">
           {/* smaller device menu */}
           <div className="absolute top-2 z-[30] left-0 lg:hidden">
             <div
