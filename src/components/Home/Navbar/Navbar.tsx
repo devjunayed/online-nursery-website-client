@@ -31,7 +31,7 @@ const Navbar = () => {
   return (
     <>
       <div className="relative navbar rounded px-6 bg-[#60A83B] uppercase text-white">
-        <div className="navbar-start w-full">
+        <div className=" w-full">
           {/* smaller device menu */}
           <div className="absolute top-2 z-[30] left-0 lg:hidden">
             <div
@@ -72,7 +72,7 @@ const Navbar = () => {
             </ul>
           </div>
         </div>
-        <div className="navbar-end">
+        <div className="">
           <a href="" className="block relative">
             <ShoppingCartOutlined />
             <span className="absolute -top-2 -right-3 text-xs">{0}</span>

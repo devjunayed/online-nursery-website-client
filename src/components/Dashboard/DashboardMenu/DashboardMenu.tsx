@@ -3,9 +3,8 @@ import {
   LaptopOutlined,
 
 } from "@ant-design/icons";
-import { Layout, Menu, theme } from "antd";
+import { ConfigProvider, Layout, Menu, theme } from "antd";
 import { Link, Outlet } from "react-router-dom";
-
 const { Content, Sider } = Layout;
 
 
@@ -55,11 +54,18 @@ const menu = menusLink.map((menu, index) => {
 
 const DashboardMenu: React.FC = () => {
   const {
-    token: { colorBgContainer, borderRadiusLG },
+    token: { colorText, colorBgContainer, borderRadiusLG },
   } = theme.useToken();
 
   return (
-    <Layout>
+
+    // for changing theme color of ant design
+   <ConfigProvider theme={{
+    token: {
+      colorPrimary: "#60A83B"
+    }
+   }}>
+     <Layout>
       <Content>
         <Layout
           style={{
@@ -73,8 +79,12 @@ const DashboardMenu: React.FC = () => {
               mode="inline"
               defaultSelectedKeys={["1"]}
               defaultOpenKeys={["sub1"]}
-              style={{ height: "100%" }}
+              style={{
+                height: "100%",
+                color: colorText, // Text color of the menu items
+              }}
               items={menu}
+            
             />
           </Sider>
           <Content style={{ padding: "0 24px", minHeight: 280 }}>
@@ -83,6 +93,7 @@ const DashboardMenu: React.FC = () => {
         </Layout>
       </Content>
     </Layout>
+   </ConfigProvider>
   );
 };
 
