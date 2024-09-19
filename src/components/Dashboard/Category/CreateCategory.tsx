@@ -1,10 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from "react";
-import { Button, Form, Input, Select, Space } from "antd";
+import { Button, Form, Input, Space, message } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { Image, Upload } from "antd";
 import type { GetProp, UploadFile, UploadProps } from "antd";
-
-const { Option } = Select;
+import { useCreateCategoryMutation } from "../../../redux/api/category/categoryApi";
 
 const layout = {
   labelCol: { span: 8 },
@@ -28,6 +28,10 @@ const getBase64 = (file: FileType): Promise<string> =>
 // Component start from here
 
 const CreateCategory: React.FC = () => {
+  // getting redux mutations
+  const [createCategory] = useCreateCategoryMutation();
+  const [messageApi, contextHolder] = message.useMessage();
+
   const [form] = Form.useForm();
 
   const [previewOpen, setPreviewOpen] = useState(false);
@@ -61,11 +65,40 @@ const CreateCategory: React.FC = () => {
     </button>
   );
 
-  const onFinish = (values: any) => {
-    if (fileList.length !== 0) {
-      values.image = fileList[0];
+  // submitting data
+
+  const onFinish = async (values: any) => {
+    const formData = new FormData();
+    formData.append("name", values.name);
+    formData.append("description", values.description);
+
+    if (fileList.length > 0 && fileList[0].originFileObj) {
+      formData.append("image", fileList[0].originFileObj as Blob);
+    }else{
+      messageApi.open({
+        type: "error",
+        content: "Image file not found!"
+      })
     }
-    console.log(values);
+
+    try {
+      const category = await createCategory(formData);
+      if(category.data.success){
+        messageApi.open({
+          type: 'success',
+          content: "Category successfully created"
+        })
+        setFileList([]);
+        onReset();
+      }
+      console.log(category);
+    } catch (error) {
+      messageApi.open({
+        type: 'error',
+        content: "Error creating category"
+      })
+      console.error("Error creating category:", error);
+    }
   };
 
   const onReset = () => {
@@ -74,6 +107,7 @@ const CreateCategory: React.FC = () => {
 
   return (
     <div className="w-full mx-auto ">
+      {contextHolder}
       <Form
         {...layout}
         form={form}
