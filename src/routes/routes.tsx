@@ -3,6 +3,10 @@ import Home from "../pages/Home/Home";
 import Products from "../pages/Products/Products";
 import MainLayout from "../layout/MainLayout";
 import DashboardLayout from "../layout/DashboardLayout";
+import CreateCategory from "../components/Dashboard/Category/CreateCategory";
+import ManageCategory from "../components/Dashboard/Category/ManageCategory";
+import CreateProducts from "../components/Dashboard/Products/CreateProducts";
+import ManageProducts from "../components/Dashboard/Products/ManageProducts";
 
 const router = createBrowserRouter([
     {
@@ -24,12 +28,20 @@ const router = createBrowserRouter([
         element: <DashboardLayout />,
         children: [
             {
+                path: '/dashboard/create-products',
+                element: <CreateProducts />
+            },
+            {
                 path: '/dashboard/manage-products',
-                element: <div>manage products</div>
+                element: <ManageProducts />
+            },
+            {
+                path: '/dashboard/create-category',
+                element: <CreateCategory />
             },
             {
                 path: '/dashboard/manage-category',
-                element: <div>manage category</div>
+                element: <ManageCategory />
             },
         ]
     }

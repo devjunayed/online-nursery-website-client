@@ -1,6 +1,7 @@
 import React from "react";
 import {
-  LaptopOutlined,
+  FolderOutlined,
+  ProductOutlined,
 
 } from "@ant-design/icons";
 import { ConfigProvider, Layout, Menu, theme } from "antd";
@@ -12,22 +13,31 @@ const { Content, Sider } = Layout;
 const menusLink = [
     {
         text: "Category",
-        icon: LaptopOutlined,
+        icon: FolderOutlined ,
         children: [
+            {
+                path: "/dashboard/create-category",
+                text: "Create Category",
+            },
             {
                 path: "/dashboard/manage-category",
                 text: "Manage Category",
-            }
+            },
+
         ]
     },
     {
         text: "Products",
-        icon: LaptopOutlined,
+        icon: ProductOutlined,
         children: [
+            {
+                path: "/dashboard/create-products",
+                text: "Create Products",
+            },
             {
                 path: "/dashboard/manage-products",
                 text: "Manage Products",
-            }
+            },
         ]
     },
 ]
