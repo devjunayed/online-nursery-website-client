@@ -2,37 +2,29 @@
 import React from "react";
 import { Image, Space, Table } from "antd";
 import { useGetCategoryQuery } from "../../../redux/api/category/categoryApi";
+import DeleteCategory from "./DeleteCategory";
+import EditCategory from "./EditCategory";
 
 const { Column } = Table;
 
-interface DataType {
-  key: React.Key;
-  image?: string;
-  firstName: string;
-  lastName: string;
-  age: number;
-  address: string;
-  tags: string[];
+export interface CategoryDataType {
+  _id: string;
+  image: string;
+  name: string;
+  description: string;
 }
 
-
-
 const ManageCategory: React.FC = () => {
-  const { data = [], isLoading, isError } = useGetCategoryQuery('');
-  console.log(data.data);
+  const { data = [], isLoading, isError, refetch } = useGetCategoryQuery("");
 
   if (isLoading) {
     return <div>Loading...</div>;
   }
 
-  if (isError ) {
+  if (isError) {
     return <div>Error loading categories</div>;
   }
-  if(!data?.data){
-    return <div>kocu</div>
-  }
-  
-  // return <div>kocu</div>
+
   return (
     <Table dataSource={data?.data}>
       <Column
@@ -48,17 +40,23 @@ const ManageCategory: React.FC = () => {
       />
       <Column title="Category Name" dataIndex="name" key="name" />
 
-      <Column title="Category Description" dataIndex="description" key="description" />
-     
+      <Column
+        title="Category Description"
+        dataIndex="description"
+        key="description"
+      />
+
       <Column
         title="Action"
         key="action"
-        render={(_: any, record: DataType) => (
-          <Space size="middle">
-            <a>Invite {record.lastName}</a>
-            <a>Delete</a>
-          </Space>
-        )}
+        render={(_: any, record: CategoryDataType) => {
+          return (
+            <Space size="middle">
+              <EditCategory refetch={refetch} />
+              <DeleteCategory refetch={refetch} data={record} />
+            </Space>
+          );
+        }}
       />
     </Table>
   );
