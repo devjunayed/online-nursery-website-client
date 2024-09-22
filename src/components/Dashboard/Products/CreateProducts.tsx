@@ -101,7 +101,7 @@ const CreateProducts: React.FC = () => {
   };
 
   return (
-    <div className="w-full mx-auto ">
+    <div className="w-full mx-auto overflow-x-hidden ">
       {contextHolder}
       <Form
         {...layout}
@@ -110,7 +110,7 @@ const CreateProducts: React.FC = () => {
         onFinish={onFinish}
         style={{ maxWidth: 600 }}
       >
-        <div className="mx-auto w-full mb-6 ml-20  flex justify-center">
+        <div className="mx-auto w-full mb-6 md:ml-20  flex justify-center">
           <Upload
             action={""}
             listType="picture-circle"

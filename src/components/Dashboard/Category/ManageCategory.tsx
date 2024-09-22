@@ -26,7 +26,7 @@ const ManageCategory: React.FC = () => {
   }
 
   return (
-    <Table dataSource={data?.data}>
+    <Table dataSource={data?.data} className="overflow-x-auto">
       <Column
         title="No."
         key="serial"

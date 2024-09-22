@@ -168,7 +168,7 @@ const EditCategory = ({ data, refetch }: EditCategoryProps) => {
             name="control-hooks"
             style={{ maxWidth: 600 }}
           >
-            <div className="mx-auto w-full mb-6 flex justify-center">
+            <div className="mx-auto o w-full mb-6 flex justify-center">
               <Upload
                 action={""}
                 listType="picture-circle"
