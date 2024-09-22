@@ -1,29 +1,28 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { DeleteOutlined } from "@ant-design/icons";
 import { message, Popconfirm } from "antd";
-import { useDeleteCategoryMutation } from "../../../redux/api/category/categoryApi";
 import { useState } from "react";
-import { CategoryDataType } from "./ManageCategory";
+import { ProductDataType } from "../../../types/dataType";
+import { useDeleteProductsMutation } from "../../../redux/api/products/productsApi";
 
-interface DeleteCategoryProps {
-  data: CategoryDataType;
+interface DeleteProductsProps {
+  data: ProductDataType;
   refetch: () => Promise<any>;
 }
 
-const DeleteCategory = ({ data, refetch }: DeleteCategoryProps) => {
-  const [deleteCategory] = useDeleteCategoryMutation();
+const DeleteProducts = ({ data, refetch }: DeleteProductsProps) => {
+  const [deleteProducts] = useDeleteProductsMutation();
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
-
 
   const showPopconfirm = () => {
     setOpen(true);
 
     setTimeout(() => {
-        setOpen(false);
-        setConfirmLoading(false);
-      }, 2000);
+      setOpen(false);
+      setConfirmLoading(false);
+    }, 2000);
   };
 
   const handleOk = async () => {
@@ -34,15 +33,15 @@ const DeleteCategory = ({ data, refetch }: DeleteCategoryProps) => {
       setConfirmLoading(false);
     }, 1000);
 
-    const result = await deleteCategory(data._id);
+    const result = await deleteProducts(data._id);
 
-    if(result.data.data.deletedCount > 0){
+    if (result.data.data.deletedCount > 0) {
       messageApi.open({
         type: "success",
-        content: "Deleted successfully!"
-      })
+        content: "Deleted successfully!",
+      });
     }
-    
+
     refetch();
     console.log(result.data);
   };
@@ -54,7 +53,7 @@ const DeleteCategory = ({ data, refetch }: DeleteCategoryProps) => {
 
   return (
     <Popconfirm
-      title={`Delete ${data.name}`}
+      title={`Delete ${data.title}`}
       description="The action can not be undone"
       open={open}
       onConfirm={handleOk}
@@ -69,4 +68,4 @@ const DeleteCategory = ({ data, refetch }: DeleteCategoryProps) => {
   );
 };
 
-export default DeleteCategory;
+export default DeleteProducts;

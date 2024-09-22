@@ -6,7 +6,7 @@ import DashboardLayout from "../layout/DashboardLayout";
 import CreateCategory from "../components/Dashboard/Category/CreateCategory";
 import ManageCategory from "../components/Dashboard/Category/ManageCategory";
 import CreateProducts from "../components/Dashboard/Products/CreateProducts";
-import ManageProducts from "../components/Dashboard/Products/ManageProducts";
+import ManageProduct from "../components/Dashboard/Products/ManageProduct";
 
 const router = createBrowserRouter([
     {
@@ -33,7 +33,7 @@ const router = createBrowserRouter([
             },
             {
                 path: '/dashboard/manage-products',
-                element: <ManageProducts />
+                element: <ManageProduct />
             },
             {
                 path: '/dashboard/create-category',

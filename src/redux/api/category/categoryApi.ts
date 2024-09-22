@@ -9,12 +9,14 @@ const categoryApi = baseApi.injectEndpoints({
         method: "POST",
         body: category,
       }),
+      invalidatesTags: ['Category']
     }),
     getCategory: builder.query({
       query: () => ({
         url: "/category",
         method: "GET",
       }),
+      providesTags: ['Category']
     }),
     deleteCategory: builder.mutation({
       query: (id) => ({
@@ -23,10 +25,10 @@ const categoryApi = baseApi.injectEndpoints({
       }),
     }),
     updateCategory: builder.mutation({
-      query: ({ id, category }) => ({
-        url: `/category/:${id}`,
-        method: "PUT",
-        body: category,
+      query: ({ id, formData }) => ({
+        url: `/category/${id}`,
+        method: "PATCH",
+        body: formData,
       }),
     }),
   }),

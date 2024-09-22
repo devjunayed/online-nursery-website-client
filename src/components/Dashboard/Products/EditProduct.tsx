@@ -1,16 +1,18 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from "react";
 import { EditOutlined } from "@ant-design/icons";
-import { useUpdateCategoryMutation } from "../../../redux/api/category/categoryApi";
-import { Button, Form, Input, message, Modal } from "antd";
+import { Button, Form, Input, message, Modal, Select } from "antd";
 import { Image, Upload } from "antd";
 import type { GetProp, UploadFile, UploadProps } from "antd";
-import { CategoryDataType } from "./ManageCategory";
+import { ProductDataType } from "../../../types/dataType";
 import { getBase } from "../../../utils/getBase";
 import UploadButton from "../Shared/UploadButton";
+import { useUpdateProductsMutation } from "../../../redux/api/products/productsApi";
+import TextArea from "antd/es/input/TextArea";
+import { useGetCategoryQuery } from "../../../redux/api/category/categoryApi";
 
-interface EditCategoryProps {
-  data: CategoryDataType;
+interface EditProductsProps {
+  data: ProductDataType;
   refetch: () => Promise<any>;
 }
 
@@ -21,12 +23,11 @@ const layout = {
 
 type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
 
-
-
-const EditCategory = ({ data, refetch }: EditCategoryProps) => {
+const EditProducts = ({ data, refetch }: EditProductsProps) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [form] = Form.useForm();
-  const [updateCategory, { isLoading }] = useUpdateCategoryMutation();
+  const [updateProducts, { isLoading }] = useUpdateProductsMutation();
+  const { data: categories } = useGetCategoryQuery("");
 
   const [messageApi, contextHolder] = message.useMessage();
 
@@ -54,7 +55,6 @@ const EditCategory = ({ data, refetch }: EditCategoryProps) => {
     setFileList(updatedFileList as UploadFile[]);
   };
 
- 
   const onReset = () => {
     form.resetFields();
     setFileList([]);
@@ -63,7 +63,12 @@ const EditCategory = ({ data, refetch }: EditCategoryProps) => {
   // Open modal
   const showModal = () => {
     // setting old value to the form
-    form.setFieldsValue({ name: data.name, description: data.description });
+    form.setFieldsValue({
+      title: data.title,
+      description: data.description,
+      price: data.price,
+      category: data.category,
+    });
 
     // setting old image to the upload
     setFileList([
@@ -90,8 +95,10 @@ const EditCategory = ({ data, refetch }: EditCategoryProps) => {
 
     // creating form data
     const formData = new FormData();
-    formData.append("name", values.name);
+    formData.append("title", values.title);
     formData.append("description", values.description);
+    formData.append("price", values.price);
+    formData.append("category", values.category);
 
     // checking if image available or in url
     if (fileList.length > 0 && fileList[0].originFileObj) {
@@ -107,11 +114,11 @@ const EditCategory = ({ data, refetch }: EditCategoryProps) => {
 
     try {
       const id = data._id;
-      const category = await updateCategory({ id, formData });
+      const category = await updateProducts({ id, formData });
       if (category.data.success) {
         messageApi.open({
           type: "success",
-          content: "Category updated successfully",
+          content: "Products updated successfully",
         });
         setFileList([]);
         onReset();
@@ -126,7 +133,6 @@ const EditCategory = ({ data, refetch }: EditCategoryProps) => {
       });
       console.error("Error updating category:", error);
     }
-
   };
 
   return (
@@ -136,7 +142,7 @@ const EditCategory = ({ data, refetch }: EditCategoryProps) => {
       </a>
 
       <Modal
-        title="Edit Category"
+        title="Edit Products"
         open={isModalVisible}
         onOk={handleOk}
         confirmLoading={isLoading}
@@ -168,7 +174,7 @@ const EditCategory = ({ data, refetch }: EditCategoryProps) => {
             name="control-hooks"
             style={{ maxWidth: 600 }}
           >
-            <div className="mx-auto w-full mb-6 flex justify-center">
+            <div className="mx-auto w-full mb-6   flex justify-center">
               <Upload
                 action={""}
                 listType="picture-circle"
@@ -191,7 +197,7 @@ const EditCategory = ({ data, refetch }: EditCategoryProps) => {
                 />
               )}
             </div>
-            <Form.Item name="name" label="Name" rules={[{ required: true }]}>
+            <Form.Item name="title" label="Title" rules={[{ required: true }]}>
               <Input />
             </Form.Item>
             <Form.Item
@@ -199,7 +205,24 @@ const EditCategory = ({ data, refetch }: EditCategoryProps) => {
               label="Description"
               rules={[{ required: true }]}
             >
-              <Input />
+              <TextArea />
+            </Form.Item>
+            <Form.Item name="price" label="Price" rules={[{ required: true }]}>
+              <Input type="number" />
+            </Form.Item>
+
+            <Form.Item
+              label="Category"
+              name="category"
+              rules={[{ required: true, message: "Please input!" }]}
+            >
+              <Select>
+                {categories?.data?.map((category: any) => (
+                  <Select.Option value={category.name} key={category.name}>
+                    {category.name}
+                  </Select.Option>
+                ))}
+              </Select>
             </Form.Item>
           </Form>
         </div>
@@ -208,4 +231,4 @@ const EditCategory = ({ data, refetch }: EditCategoryProps) => {
   );
 };
 
-export default EditCategory;
+export default EditProducts;

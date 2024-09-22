@@ -52,7 +52,7 @@ const ManageCategory: React.FC = () => {
         render={(_: any, record: CategoryDataType) => {
           return (
             <Space size="middle">
-              <EditCategory refetch={refetch} />
+              <EditCategory data={record} refetch={refetch} />
               <DeleteCategory refetch={refetch} data={record} />
             </Space>
           );

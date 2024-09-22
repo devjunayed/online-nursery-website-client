@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from "react";
 import { Button, Form, Input, Space, message } from "antd";
-import { PlusOutlined } from "@ant-design/icons";
 import { Image, Upload } from "antd";
 import type { GetProp, UploadFile, UploadProps } from "antd";
 import { useCreateCategoryMutation } from "../../../redux/api/category/categoryApi";
+import { getBase } from "../../../utils/getBase";
+import UploadButton from "../Shared/UploadButton";
 
 const layout = {
   labelCol: { span: 8 },
@@ -17,13 +18,7 @@ const tailLayout = {
 
 type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
 
-const getBase64 = (file: FileType): Promise<string> =>
-  new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result as string);
-    reader.onerror = (error) => reject(error);
-  });
+
 
 // Component start from here
 
@@ -40,7 +35,7 @@ const CreateCategory: React.FC = () => {
 
   const handlePreview = async (file: UploadFile) => {
     if (!file.url && !file.preview) {
-      file.preview = await getBase64(file.originFileObj as FileType);
+      file.preview = await getBase(file.originFileObj as FileType);
     }
 
     setPreviewImage(file.url || (file.preview as string));
@@ -58,12 +53,7 @@ const CreateCategory: React.FC = () => {
     setFileList(updatedFileList as UploadFile[]);
   };
 
-  const uploadButton = (
-    <button style={{ border: 0, background: "none" }} type="button">
-      <PlusOutlined />
-      <div style={{ marginTop: 8 }}>Upload</div>
-    </button>
-  );
+ 
 
   // submitting data
 
@@ -123,7 +113,7 @@ const CreateCategory: React.FC = () => {
             onPreview={handlePreview}
             onChange={handleChange}
           >
-            {fileList.length >= 1 ? null : uploadButton}
+            {fileList.length >= 1 ? null : <UploadButton />}
           </Upload>
           {previewImage && (
             <Image
