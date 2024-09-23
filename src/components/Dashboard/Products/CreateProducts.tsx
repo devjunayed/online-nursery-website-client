@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from "react";
-import { Button, Form, Input, Select, Space, message } from "antd";
+import { Button, Flex, Form, Input, Rate, Select, Space, message } from "antd";
 import { Image, Upload } from "antd";
-import type {  UploadFile, UploadProps } from "antd";
+import type { UploadFile, UploadProps } from "antd";
 import { useCreateProductsMutation } from "../../../redux/api/products/productsApi";
 import TextArea from "antd/es/input/TextArea";
 import { useGetCategoryQuery } from "../../../redux/api/category/categoryApi";
@@ -18,7 +18,6 @@ const layout = {
 const tailLayout = {
   wrapperCol: { offset: 8, span: 16 },
 };
-
 
 // Component start from here
 
@@ -36,6 +35,7 @@ const CreateProducts: React.FC = () => {
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [fileList, setFileList] = useState<UploadFile[]>([]);
+  const [rating, setRating] = useState(5);
 
   const handlePreview = async (file: UploadFile) => {
     if (!file.url && !file.preview) {
@@ -57,8 +57,6 @@ const CreateProducts: React.FC = () => {
     setFileList(updatedFileList as UploadFile[]);
   };
 
-
-
   // submitting data
 
   const onFinish = async (values: any) => {
@@ -67,6 +65,8 @@ const CreateProducts: React.FC = () => {
     formData.append("description", values.description);
     formData.append("price", values.price);
     formData.append("category", values.category);
+    formData.append("quantity", values.quantity);
+    formData.append("rating", rating.toString());
 
     if (fileList.length > 0 && fileList[0].originFileObj) {
       formData.append("image", fileList[0].originFileObj as Blob);
@@ -100,10 +100,15 @@ const CreateProducts: React.FC = () => {
     form.resetFields();
   };
 
+  const handleRating = (value: number) => {
+    setRating(value);
+  }
+
   return (
-    <div className="w-full mx-auto overflow-x-hidden ">
+    <div className="w-full flex items-center justify-center mx-auto overflow-x-hidden ">
       {contextHolder}
       <Form
+        className="w-full"
         {...layout}
         form={form}
         name="control-hooks"
@@ -135,14 +140,15 @@ const CreateProducts: React.FC = () => {
         <Form.Item name="title" label="Title" rules={[{ required: true }]}>
           <Input />
         </Form.Item>
+
+        <Form.Item name="price" label="Price" rules={[{ required: true }]}>
+          <Input type="number" />
+        </Form.Item>
         <Form.Item
-          name="description"
-          label="Description"
+          name="quantity"
+          label="Quantity"
           rules={[{ required: true }]}
         >
-          <TextArea />
-        </Form.Item>
-        <Form.Item name="price" label="Price" rules={[{ required: true }]}>
           <Input type="number" />
         </Form.Item>
 
@@ -159,7 +165,20 @@ const CreateProducts: React.FC = () => {
             ))}
           </Select>
         </Form.Item>
-
+        <Form.Item
+          name="description"
+          label="Description"
+          rules={[{ required: true }]}
+        >
+          <TextArea />
+        </Form.Item>
+        <Form.Item name="rating" label="Rating" >
+          <Flex gap="middle" vertical>
+            <Flex gap="middle">
+              <Rate defaultValue={rating} allowHalf onChange={handleRating} />
+            </Flex>
+          </Flex>
+        </Form.Item>
         <Form.Item {...tailLayout}>
           <Space>
             <Button type="primary" htmlType="submit">

@@ -96,10 +96,11 @@ const CreateCategory: React.FC = () => {
   };
 
   return (
-    <div className="w-full mx-auto overflow-x-hidden">
+    <div className="w-full flex items-center justify-center mx-auto overflow-x-hidden">
       {contextHolder}
       <Form
         {...layout}
+        className="w-full"
         form={form}
         name="control-hooks"
         onFinish={onFinish}

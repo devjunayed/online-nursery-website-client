@@ -6,19 +6,19 @@ Develop an online nursery website using React, Redux, Node.js, and Express.js. T
 
 ## 🌟Features
 
-### 1\. Public Routes 🚀
+### ✅✅✅1\. Public Routes 🚀
 
 All routes on the website are accessible without authentication.
 
 ### 2\. Product and Category Management 🛠️
 
-*   **Product List Table:**
+*   ✅✅✅**Product List Table:**
     *   Display products in a table format. The table should include columns for the image, title, price, category, and actions.
-*   **Action Buttons:**
+*   ✅✅✅**Action Buttons:**
     *   Include buttons for updating and deleting products.
     *   Updating a product should open a form in a modal allowing the user to modify existing details.
     *   Deleting a product should open a confirmation modal, asking the user for confirmation before removal.
-*   **Adding a Product:**
+*   ✅✅✅**Adding a Product:**
     *   Include a button to create the new product.
     *   Provide a form to add new products with fields for category, title, price, quantity, description, rating, image (you can use ImgBB for image upload or allow direct link entry).
 
@@ -45,14 +45,14 @@ All routes on the website are accessible without authentication.
 
 ## 📋Landing Page Components
 
-- **Navbar**: Navigation bar with links to various sections and pages.
-- **Hero Section**: Highlighting the main features or promotions.
+- ✅✅✅**Navbar**: Navigation bar with links to various sections and pages.
+- ✅✅✅**Hero Section**: Highlighting the main features or promotions.
 - **Product Search, Filter, and Pagination**: Options for users to refine their product search.
 - **Category Section**: Display different product categories.
 - **Product List**: Display products in card format with image, title, price, rating, and an "Add to Cart" button.
 - **Product Details**: Clicking on a product card navigates to the product details page with comprehensive information including image, title, description, price, rating, Category and an "Add to Cart" button.
 - **Image Gallery**: Showcases images of the products, displayed in a mosaic view (For reference: [https://ps.w.org/photo-gallery/assets/screenshot-5.png?rev=2039606](https://ps.w.org/photo-gallery/assets/screenshot-5.png?rev=2039606) , [https://assets.hongkiat.com/uploads/free-responsive-image-gallery/8-bootstrap-gallery.jpeg](https://assets.hongkiat.com/uploads/free-responsive-image-gallery/8-bootstrap-gallery.jpeg)).
-- **Footer**: Additional links and information.
+- ✅✅✅**Footer**: Additional links and information.
 
 ## 📑Page List
 
