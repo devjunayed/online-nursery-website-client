@@ -1,4 +1,9 @@
+import { CategoryDataType } from "../../../components/Dashboard/Category/ManageCategory";
 import { baseApi } from "../baseApi";
+
+interface GetCategoryResponse {
+  data: CategoryDataType[]; // This matches the `data` field in the response
+}
 
 const categoryApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -16,7 +21,8 @@ const categoryApi = baseApi.injectEndpoints({
         url: "/category",
         method: "GET",
       }),
-      providesTags: ['Category']
+      providesTags: ['Category'],
+      transformResponse: (response: GetCategoryResponse) => response.data,
     }),
     deleteCategory: builder.mutation({
       query: (id) => ({

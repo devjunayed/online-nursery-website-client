@@ -5,11 +5,11 @@ import { Button, Form, Input, message, Modal, Select } from "antd";
 import { Image, Upload } from "antd";
 import type { GetProp, UploadFile, UploadProps } from "antd";
 import { ProductDataType } from "../../../types/dataType";
-import { getBase } from "../../../utils/getBase";
 import UploadButton from "../Shared/UploadButton";
 import { useUpdateProductsMutation } from "../../../redux/api/products/productsApi";
 import TextArea from "antd/es/input/TextArea";
 import { useGetCategoryQuery } from "../../../redux/api/category/categoryApi";
+import { getBase } from "../../../utils/getBase";
 
 interface EditProductsProps {
   data: ProductDataType;
@@ -22,6 +22,8 @@ const layout = {
 };
 
 type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
+
+
 
 const EditProducts = ({ data, refetch }: EditProductsProps) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -217,7 +219,7 @@ const EditProducts = ({ data, refetch }: EditProductsProps) => {
               rules={[{ required: true, message: "Please input!" }]}
             >
               <Select>
-                {categories?.data?.map((category: any) => (
+                {categories?.map((category: any) => (
                   <Select.Option value={category.name} key={category.name}>
                     {category.name}
                   </Select.Option>

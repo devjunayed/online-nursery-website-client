@@ -158,7 +158,7 @@ const CreateProducts: React.FC = () => {
           rules={[{ required: true, message: "Please input!" }]}
         >
           <Select>
-            {categories?.data?.map((category: any) => (
+            {categories?.map((category: any) => (
               <Select.Option value={category.name} key={category.name}>
                 {category.name}
               </Select.Option>
