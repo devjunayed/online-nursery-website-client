@@ -5,7 +5,7 @@ import {
   MenuUnfoldOutlined,
   ProductOutlined,
 } from "@ant-design/icons";
-import { Button, ConfigProvider, Layout, Menu, theme } from "antd";
+import { Button,  Layout, Menu, theme } from "antd";
 import { Link, Outlet } from "react-router-dom";
 const { Content, Sider } = Layout;
 
@@ -71,13 +71,6 @@ const DashboardMenu: React.FC = () => {
 
   return (
     // for changing theme color of ant design
-    <ConfigProvider
-      theme={{
-        token: {
-          colorPrimary: "#60A83B",
-        },
-      }}
-    >
       <Layout>
         <Content>
           <Layout
@@ -125,7 +118,6 @@ const DashboardMenu: React.FC = () => {
           </Layout>
         </Content>
       </Layout>
-    </ConfigProvider>
   );
 };
 

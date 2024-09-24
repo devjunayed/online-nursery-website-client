@@ -18,12 +18,8 @@ const tailLayout = {
 
 type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
 
-
-
-// Component start from here
-
+// Component starts from here
 const CreateCategory: React.FC = () => {
-  // getting redux mutations
   const [createCategory] = useCreateCategoryMutation();
   const [messageApi, contextHolder] = message.useMessage();
 
@@ -33,6 +29,7 @@ const CreateCategory: React.FC = () => {
   const [previewImage, setPreviewImage] = useState("");
   const [fileList, setFileList] = useState<UploadFile[]>([]);
 
+  // handle preview uploaded image
   const handlePreview = async (file: UploadFile) => {
     if (!file.url && !file.preview) {
       file.preview = await getBase(file.originFileObj as FileType);
@@ -42,6 +39,7 @@ const CreateCategory: React.FC = () => {
     setPreviewOpen(true);
   };
 
+  // handle change of uploading image
   const handleChange: UploadProps["onChange"] = ({ fileList: newFileList }) => {
     const updatedFileList = newFileList.map((file) => {
       if (file.status === "uploading" || file.status === "error") {
@@ -53,47 +51,90 @@ const CreateCategory: React.FC = () => {
     setFileList(updatedFileList as UploadFile[]);
   };
 
- 
-
-  // submitting data
-
   const onFinish = async (values: any) => {
+    console.log("Form values:", values.name);
+    const imgbbKey = import.meta.env.VITE_IMGBB_API_KEY;
     const formData = new FormData();
+  
+    // Appending text data to formData
     formData.append("name", values.name);
     formData.append("description", values.description);
-
+  
+    // Check if image is uploaded or not
     if (fileList.length > 0 && fileList[0].originFileObj) {
-      formData.append("image", fileList[0].originFileObj as Blob);
-    }else{
+      const imageFile = fileList[0].originFileObj;
+  
+      // Create separate formData for image upload
+      const imageData = new FormData();
+      imageData.append("image", imageFile);
+  
+      try {
+        const response = await fetch(
+          `https://api.imgbb.com/1/upload?key=${imgbbKey}`,
+          {
+            method: "POST",
+            body: imageData,
+          }
+        );
+  
+        const data = await response.json();
+        if (data.success) {
+          // Now that the image is uploaded, create a payload to send to the server
+          const categoryData = {
+            name: values.name,
+            description: values.description,
+            image: data.data.url, // Using the uploaded image URL
+          };
+  
+          console.log("Sending categoryData to the server:", categoryData);
+  
+          // Send data to your server
+          const category = await createCategory(categoryData);
+          if (category.data.success) {
+            messageApi.open({
+              type: "success",
+              content: "Category successfully created",
+            });
+            setFileList([]);
+            onReset();
+          } else {
+            messageApi.open({
+              type: "error",
+              content: category.data.message,
+            });
+          }
+        } else {
+          console.error("Upload failed:", data);
+          messageApi.open({
+            type: "error",
+            content: "Error uploading image!",
+          });
+          return;
+        }
+      } catch (error) {
+        console.error("Error uploading image:", error);
+        messageApi.open({
+          type: "error",
+          content: "Error uploading image!",
+        });
+        return;
+      }
+    } else {
       messageApi.open({
         type: "error",
-        content: "Image file not found!"
-      })
-    }
-
-    try {
-      const category = await createCategory(formData);
-      if(category.data.success){
-        messageApi.open({
-          type: 'success',
-          content: "Category successfully created"
-        })
-        setFileList([]);
-        onReset();
-      }
-      console.log(category);
-    } catch (error) {
-      messageApi.open({
-        type: 'error',
-        content: "Error creating category"
-      })
-      console.error("Error creating category:", error);
+        content: "Image file not found!",
+      });
+      return;
     }
   };
-
+  
+  // Reset form function
   const onReset = () => {
     form.resetFields();
+    setFileList([]);
+    setPreviewImage("");
   };
+  
 
   return (
     <div className="w-full flex items-center justify-center mx-auto overflow-x-hidden">
@@ -102,8 +143,8 @@ const CreateCategory: React.FC = () => {
         {...layout}
         className="w-full"
         form={form}
-        name="control-hooks"
         onFinish={onFinish}
+        name="control-hooks"
         style={{ maxWidth: 600 }}
       >
         <div className="mx-auto w-full mb-6 md:ml-20  flex justify-center">
@@ -113,6 +154,7 @@ const CreateCategory: React.FC = () => {
             fileList={fileList}
             onPreview={handlePreview}
             onChange={handleChange}
+            beforeUpload={() => false} // Prevent default upload
           >
             {fileList.length >= 1 ? null : <UploadButton />}
           </Upload>
@@ -141,7 +183,7 @@ const CreateCategory: React.FC = () => {
 
         <Form.Item {...tailLayout}>
           <Space>
-            <Button type="primary" htmlType="submit">
+            <Button  type="primary" htmlType="submit">
               Submit
             </Button>
             <Button htmlType="button" onClick={onReset}>
