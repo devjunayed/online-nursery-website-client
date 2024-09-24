@@ -2,29 +2,20 @@ import { Button, Flex, Form, Input, Layout, Rate, Select, Space } from "antd";
 import { Content } from "antd/es/layout/layout";
 import Sider from "antd/es/layout/Sider";
 import { useGetCategoryQuery } from "../../../redux/api/category/categoryApi";
-import { useState } from "react";
 import { CategoryDataType } from "../../Dashboard/Category/ManageCategory";
 
 const Products = () => {
   const { Search } = Input;
-  const [rating, setRating] = useState(5);
+  const rating  = 5;
 
-  const {data: categories} = useGetCategoryQuery("");
+  const { data: categories } = useGetCategoryQuery("");
   const onSearch = (value: string) => {
     console.log(value);
   };
 
-  const onFinish = () => {
+  const onFinish = () => {};
 
-  }
-
-  const handleRating = () => {
-
-  }
-
-  const onReset = () => {
-
-  }
+  const handleRating = () => {};
 
   return (
     <div>
@@ -46,16 +37,9 @@ const Products = () => {
               onFinish={onFinish}
               style={{ maxWidth: 600 }}
             >
-                <div className="text-xl mb-10 text-bold">Filter by:</div>
-             
+              <div className="text-xl mb-10 text-bold">Filter by:</div>
 
-             
-              
-
-              <Form.Item
-                label="Category"
-                name="category"
-              >
+              <Form.Item label="Category" name="category">
                 <Select>
                   {categories?.map((category: CategoryDataType) => (
                     <Select.Option value={category.name} key={category.name}>
@@ -64,7 +48,7 @@ const Products = () => {
                   ))}
                 </Select>
               </Form.Item>
-          
+
               <Form.Item name="rating" label="Rating">
                 <Flex gap="middle" vertical>
                   <Flex gap="middle">
@@ -76,12 +60,11 @@ const Products = () => {
                   </Flex>
                 </Flex>
               </Form.Item>
-              <Form.Item >
+              <Form.Item>
                 <Space className="justify-end flex">
                   <Button type="primary" htmlType="submit">
                     Submit
                   </Button>
-                 
                 </Space>
               </Form.Item>
             </Form>

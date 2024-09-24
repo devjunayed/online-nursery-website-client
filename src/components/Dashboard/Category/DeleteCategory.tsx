@@ -35,6 +35,7 @@ const DeleteCategory = ({ data, refetch }: DeleteCategoryProps) => {
     }, 1000);
 
     const result = await deleteCategory(data._id);
+    console.log(result)
 
     if(result.data.data.deletedCount > 0){
       messageApi.open({
