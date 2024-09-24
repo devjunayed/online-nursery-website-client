@@ -21,8 +21,6 @@ const layout = {
 
 type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
 
-
-
 const EditCategory = ({ data, refetch }: EditCategoryProps) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [form] = Form.useForm();
@@ -54,7 +52,6 @@ const EditCategory = ({ data, refetch }: EditCategoryProps) => {
     setFileList(updatedFileList as UploadFile[]);
   };
 
- 
   const onReset = () => {
     form.resetFields();
     setFileList([]);
@@ -84,49 +81,70 @@ const EditCategory = ({ data, refetch }: EditCategoryProps) => {
   };
 
   // Handle form submission
-  const handleOk = async () => {
-    // getting name and description from the form
-    const values = await form.validateFields();
-
-    // creating form data
-    const formData = new FormData();
-    formData.append("name", values.name);
-    formData.append("description", values.description);
-
-    // checking if image available or in url
-    if (fileList.length > 0 && fileList[0].originFileObj) {
-      formData.append("image", fileList[0].originFileObj as Blob);
-    } else if (fileList.length === 0) {
-      messageApi.open({
-        type: "error",
-        content: "Image file not found!",
-      });
-    } else if (!fileList[0].originFileObj) {
-      formData.append("image", data.image);
-    }
-
+  const handleOk = async (values: any) => {
     try {
+      const categoryData = {
+        name: values.name,
+        description: values.description,
+        image: data.image, // Default image from existing data
+      };
+
+      const imgbbKey = import.meta.env.VITE_IMGBB_API_KEY;
+
+      // Checking if a new image is uploaded
+      if (fileList.length > 0 && fileList[0].originFileObj) {
+        const formData = new FormData();
+        formData.append("image", fileList[0].originFileObj as Blob);
+        const response = await fetch(
+          `https://api.imgbb.com/1/upload?key=${imgbbKey}`,
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
+
+        const uploadedImageData = await response.json();
+
+        if (uploadedImageData.success) {
+          categoryData.image = uploadedImageData.data.url;
+        } else {
+          messageApi.open({
+            type: "error",
+            content: "Error uploading image!",
+          });
+          return;
+        }
+      }
+
+      // Debugging output: check what data is being sent
+      console.log("Category Data to be sent:", categoryData);
+
+      // Sending updated data to the server
       const id = data._id;
-      const category = await updateCategory({ id, formData });
-      if (category.data.success) {
+      const response = await updateCategory({ id, categoryData });
+
+      console.log("Backend response:", response); // Debugging network response
+
+      if (response?.data?.success) {
         messageApi.open({
           type: "success",
-          content: "Category updated successfully",
+          content: "Category successfully updated",
         });
-        setFileList([]);
-        onReset();
         refetch();
         setIsModalVisible(false);
+      } else {
+        messageApi.open({
+          type: "error",
+          content: response?.data?.message || "Error updating category",
+        });
       }
-      console.log(category);
     } catch (error) {
+      console.error("Error updating category:", error);
       messageApi.open({
         type: "error",
-        content: "Error updating category",
+        content: "Error updating category!",
       });
-      console.error("Error updating category:", error);
     }
-
   };
 
   return (
@@ -134,41 +152,41 @@ const EditCategory = ({ data, refetch }: EditCategoryProps) => {
       <a onClick={showModal}>
         <EditOutlined /> Edit
       </a>
-
-      <Modal
-        title="Edit Category"
-        open={isModalVisible}
-        onOk={handleOk}
-        confirmLoading={isLoading}
-        onCancel={handleCancel}
-        okText="Save"
-        cancelText="Cancel"
-        footer={[
-          <Button key="reset" onClick={onReset}>
-            Reset
-          </Button>,
-          <Button key="back" onClick={handleCancel}>
-            Cancel
-          </Button>,
-          <Button
-            key="submit"
-            type="primary"
-            loading={isLoading}
-            onClick={handleOk}
+      <div className="w-full mx-auto">
+        {contextHolder}
+        <Form
+          {...layout}
+          form={form}
+          onFinish={handleOk} // Form submit handler
+          name="control-hooks"
+          style={{ maxWidth: 600 }}
+        >
+          <Modal
+            title="Edit Category"
+            open={isModalVisible}
+            onOk={() => form.submit()} // Trigger form submit
+            confirmLoading={isLoading}
+            onCancel={handleCancel}
+            okText="Save"
+            cancelText="Cancel"
+            footer={[
+              <Button key="reset" onClick={onReset}>
+                Reset
+              </Button>,
+              <Button key="back" onClick={handleCancel}>
+                Cancel
+              </Button>,
+              <Button
+                key="submit"
+                type="primary"
+                loading={isLoading}
+                onClick={() => form.submit()} // Use form.submit() to trigger onFinish
+              >
+                Save
+              </Button>,
+            ]}
           >
-            Save
-          </Button>,
-        ]}
-      >
-        <div className="w-full mx-auto ">
-          {contextHolder}
-          <Form
-            {...layout}
-            form={form}
-            name="control-hooks"
-            style={{ maxWidth: 600 }}
-          >
-            <div className="mx-auto o w-full mb-6 flex justify-center">
+            <div className="mx-auto w-full mb-6 flex justify-center">
               <Upload
                 action={""}
                 listType="picture-circle"
@@ -183,9 +201,8 @@ const EditCategory = ({ data, refetch }: EditCategoryProps) => {
                   wrapperStyle={{ display: "none" }}
                   preview={{
                     visible: previewOpen,
-                    onVisibleChange: (visible) => setPreviewOpen(visible),
-                    afterOpenChange: (visible) =>
-                      !visible && setPreviewImage(""),
+                    onVisibleChange: (visible) =>
+                      setPreviewOpen(visible),
                   }}
                   src={previewImage}
                 />
@@ -201,9 +218,9 @@ const EditCategory = ({ data, refetch }: EditCategoryProps) => {
             >
               <Input />
             </Form.Item>
-          </Form>
-        </div>
-      </Modal>
+          </Modal>
+        </Form>
+      </div>
     </>
   );
 };

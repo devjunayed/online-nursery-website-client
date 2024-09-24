@@ -4,10 +4,10 @@ const productsApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     // api method here
     createProducts: builder.mutation({
-      query: (products) => ({
+      query: (productData) => ({
         url: "/products",
         method: "POST",
-        body: products,
+        body: productData,
       }),
       invalidatesTags: ['Products']
     }),
@@ -25,10 +25,10 @@ const productsApi = baseApi.injectEndpoints({
       }),
     }),
     updateProducts: builder.mutation({
-      query: ({ id, formData }) => ({
+      query: ({ id, productData }) => ({
         url: `/products/${id}`,
         method: "PATCH",
-        body: formData,
+        body: productData,
         
       }),
       invalidatesTags: ['Products']

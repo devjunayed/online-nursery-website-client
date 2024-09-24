@@ -3,6 +3,7 @@ export interface ProductDataType {
   image: string;
   title: string;
   price: string;
+  quantity: string;
   category: string;
   description: string;
 }

@@ -5,10 +5,10 @@ import { Image, Upload } from "antd";
 import type { UploadFile, UploadProps } from "antd";
 import { useCreateProductsMutation } from "../../../redux/api/products/productsApi";
 import TextArea from "antd/es/input/TextArea";
-import { useGetCategoryQuery } from "../../../redux/api/category/categoryApi";
 import { getBase } from "../../../utils/getBase";
 import { FileType } from "../../../types/globalTypes";
 import UploadButton from "../Shared/UploadButton";
+import { useGetCategoryQuery } from "../../../redux/api/category/categoryApi";
 
 const layout = {
   labelCol: { span: 8 },
@@ -58,41 +58,78 @@ const CreateProducts: React.FC = () => {
   };
 
   // submitting data
-
   const onFinish = async (values: any) => {
-    const formData = new FormData();
-    formData.append("title", values.title);
-    formData.append("description", values.description);
-    formData.append("price", values.price);
-    formData.append("category", values.category);
-    formData.append("quantity", values.quantity);
-    formData.append("rating", rating.toString());
+    const imgbbKey = import.meta.env.VITE_IMGBB_API_KEY;
 
+    // Check if image is uploaded or not
     if (fileList.length > 0 && fileList[0].originFileObj) {
-      formData.append("image", fileList[0].originFileObj as Blob);
+      const imageFile = fileList[0].originFileObj;
+
+      // Create separate formData for image upload
+      const imageData = new FormData();
+      imageData.append("image", imageFile);
+
+      try {
+        const response = await fetch(
+          `https://api.imgbb.com/1/upload?key=${imgbbKey}`,
+          {
+            method: "POST",
+            body: imageData,
+          }
+        );
+
+        const data = await response.json();
+        if (data.success) {
+          // Now that the image is uploaded, create a payload to send to the server
+          const productData = {
+            image: data.data.url, // Using the uploaded image URL
+            title: values.title,
+            price: values.price,
+            quantity: values.quantity,
+            category: values.category,
+            description: values.description,
+            rating
+          };
+
+          console.log("Sending productData to the server:", productData);
+
+          // Send data to your server
+          const category = await createProducts(productData);
+          if (category.data.success) {
+            messageApi.open({
+              type: "success",
+              content: "Product successfully created",
+            });
+            setFileList([]);
+            onReset();
+          } else {
+            messageApi.open({
+              type: "error",
+              content: category.data.message,
+            });
+          }
+        } else {
+          console.error("Upload failed:", data);
+          messageApi.open({
+            type: "error",
+            content: "Error uploading image!",
+          });
+          return;
+        }
+      } catch (error) {
+        console.error("Error uploading image:", error);
+        messageApi.open({
+          type: "error",
+          content: "Error uploading image!",
+        });
+        return;
+      }
     } else {
       messageApi.open({
         type: "error",
         content: "Image file not found!",
       });
-    }
-
-    try {
-      const product = await createProducts(formData);
-      if (product.data.success) {
-        messageApi.open({
-          type: "success",
-          content: "Product successfully created",
-        });
-        setFileList([]);
-        onReset();
-      }
-    } catch (error) {
-      messageApi.open({
-        type: "error",
-        content: "Error creating product",
-      });
-      console.error("Error creating product:", error);
+      return;
     }
   };
 
@@ -102,7 +139,7 @@ const CreateProducts: React.FC = () => {
 
   const handleRating = (value: number) => {
     setRating(value);
-  }
+  };
 
   return (
     <div className="w-full flex items-center justify-center mx-auto overflow-x-hidden ">
@@ -153,7 +190,7 @@ const CreateProducts: React.FC = () => {
         </Form.Item>
 
         <Form.Item
-          label="Category"
+          label="Product"
           name="category"
           rules={[{ required: true, message: "Please input!" }]}
         >
@@ -172,7 +209,7 @@ const CreateProducts: React.FC = () => {
         >
           <TextArea />
         </Form.Item>
-        <Form.Item name="rating" label="Rating" >
+        <Form.Item name="rating" label="Rating">
           <Flex gap="middle" vertical>
             <Flex gap="middle">
               <Rate defaultValue={rating} allowHalf onChange={handleRating} />

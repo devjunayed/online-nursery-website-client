@@ -52,13 +52,7 @@ const CreateCategory: React.FC = () => {
   };
 
   const onFinish = async (values: any) => {
-    console.log("Form values:", values.name);
     const imgbbKey = import.meta.env.VITE_IMGBB_API_KEY;
-    const formData = new FormData();
-  
-    // Appending text data to formData
-    formData.append("name", values.name);
-    formData.append("description", values.description);
   
     // Check if image is uploaded or not
     if (fileList.length > 0 && fileList[0].originFileObj) {
