@@ -5,13 +5,13 @@ import Title from "../../components/ui/Title"
 
 const Home= () => {
   return (
-    <>
+    <div className="overflow-x-hidden">
       <Banner />
       <Title title="Categories" />
       <Category />
       <Title title="Products" />
       <Products />
-    </>
+    </div>
   )
 }
 

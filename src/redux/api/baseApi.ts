@@ -6,6 +6,6 @@ export const baseApi = createApi({
         // baseUrl: "https://online-nursery-website-server-psi.vercel.app",
         baseUrl: "http://localhost:5000",
     }),
-    tagTypes: ["Category", "Products"],
+    tagTypes: ["Category", "Products", "Cart"],
     endpoints: () => ({}),
 })

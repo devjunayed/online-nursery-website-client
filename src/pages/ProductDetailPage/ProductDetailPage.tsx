@@ -1,13 +1,18 @@
-import { useLoaderData } from "react-router-dom";
+import {  useLoaderData, useNavigate } from "react-router-dom";
 import { useGetProductsQuery } from "../../redux/api/products/productsApi";
-import { Button, Divider, Input, Rate } from "antd";
-import { ShoppingCartOutlined } from "@ant-design/icons";
+import { Button, Divider,  Input, message, Rate } from "antd";
+import { ArrowLeftOutlined, ShoppingCartOutlined } from "@ant-design/icons";
 import { useState } from "react";
+import { useCreateCartMutation } from "../../redux/api/cart/cartApi";
 
 const ProductDetailPage = () => {
   const { id } = useLoaderData() as { id: string };
-  const { data } = useGetProductsQuery(`id=${id}`);
+  const { data, refetch } = useGetProductsQuery(`id=${id}`);
   const [orderAmount, setOrderAmount] = useState(1);
+  const [createCart] = useCreateCartMutation();
+  const [messageApi, contextHolder] = message.useMessage();
+  const navigate = useNavigate();
+
 
 
   if (!data?.data || data?.data.length === 0 || data?.data[0] === undefined) {
@@ -29,17 +34,41 @@ const ProductDetailPage = () => {
     setOrderAmount(parseInt(e.target.value));
   };
 
+  const handleAddToCart = async () => {
+    const product = {...data.data[0]};
+    product.quantity = orderAmount.toString();
+
+
+    const cartResult = await createCart(product);
+    console.log(cartResult);
+
+    if(cartResult?.data.success){
+        messageApi.open({
+            type: 'success',
+            content: "Product added to the cart"
+        })
+        refetch();
+    }else{
+        messageApi.open({
+            type: 'error',
+            content: cartResult.data.message
+        })
+    }
+  }
+
   const { title, description, quantity, price, category, image, rating } =
     data?.data[0] || {};
 
   return (
     <div>
-      <div className="hero  min-h-screen">
-        <div className="hero-content flex-col lg:flex-row">
-          <div className="lg:w-1/2">
+        {contextHolder}
+        <Button onClick={()=> navigate(-1)} type="primary" className="mt-4 ml-2 flex gap-2" ><ArrowLeftOutlined /> Back</Button>
+      <div className="hero w-full  min-h-screen">
+        <div className="hero-content md:gap-8 flex-col lg:flex-row">
+          <div className="lg:w-1/2 w-full">
             <img src={image} className="w-full rounded-lg " />
           </div>
-          <div className="flex flex-col lg:w-1/2">
+          <div className="flex flex-col lg:w-1/2 ">
             <h1 className="text-2xl font-bold">{title}</h1>
             <h3 className="text-lg">{category}</h3>
             <Rate count={5} defaultValue={Number(rating)} />
@@ -50,7 +79,7 @@ const ProductDetailPage = () => {
               <p className="text-base"> {quantity} In Stock</p>
             </div>
             <Divider />
-            <div className="flex items-center mt-4 justify-between mx-20 gap-10 ">
+            <div className="flex-col flex items-center mt-4 justify-between lg:mx-20 gap-10 ">
               <div className="flex gap-4 justify-center items-center">
                 <Button onClick={handleDecrease}>-</Button>
                 <Input
@@ -62,7 +91,7 @@ const ProductDetailPage = () => {
                 />
                 <Button onClick={handleIncrease}>+</Button>
               </div>
-              <Button type="primary" className="">
+              <Button onClick={handleAddToCart} type="primary" className="">
                 Add to cart <ShoppingCartOutlined />
               </Button>
             </div>

@@ -1,7 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Flex, Input, Layout, Rate, Select, Pagination } from "antd";
-import { Content } from "antd/es/layout/layout";
-import Sider from "antd/es/layout/Sider";
+import { Flex, Input, Rate, Select, Pagination, Divider } from "antd";
+
 import { useGetCategoryQuery } from "../../../redux/api/category/categoryApi";
 import { CategoryDataType } from "../../Dashboard/Category/ManageCategory";
 import { useState, useEffect } from "react";
@@ -19,12 +18,13 @@ const Products = () => {
   const { Search } = Input;
 
   const { data: categories } = useGetCategoryQuery("");
-  const { data: productsData, refetch: refetchProducts } = useGetProductsQuery(queryUrl);
-  
+  const { data: productsData, refetch: refetchProducts } =
+    useGetProductsQuery(queryUrl);
+
   const products = productsData?.data || []; // Adjust based on your API response structure
   const totalCount = productsData?.length || 0; // Make sure your API returns total count
 
-  console.log(totalCount)
+  console.log(totalCount);
 
   const updateQueryUrl = () => {
     const queryParams = new URLSearchParams();
@@ -78,10 +78,10 @@ const Products = () => {
   }, [queryUrl, refetchProducts]);
 
   const perPageOptions = [5, 10, 20, 50];
-  
+
   return (
     <div>
-      <div className="w-1/2 mx-auto">
+      <div className="w-2/3 md:w-1/2 mx-auto">
         <Search
           placeholder="input search text"
           allowClear={true}
@@ -90,10 +90,12 @@ const Products = () => {
           onSearch={onSearch}
         />
       </div>
-      <Layout className="mb-4">
-        <Sider theme="light">
-          <div>
-            <div className="text-xl mb-10 text-bold">Filter by:</div>
+      <div className="mb-4  lg:flex gap-4">
+        <div>
+          <div className="flex flex-col justify-center items-center">
+            <div className="text-xl mb-4 mt-4 lg:mb-10 text-bold">
+              Filter by:
+            </div>
             <div>
               <Select
                 placeholder="Select a category"
@@ -114,11 +116,12 @@ const Products = () => {
               </Flex>
             </div>
           </div>
-        </Sider>
-        <Content className="bg-white">
-          <div className="grid grid-cols-4 gap-4 mb-4 bg-white pl-4 pt-4">
+          <Divider />
+        </div>
+        <div className="mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-4 bg-white pl-4 pt-4 ">
             {products?.map((product: ProductDataType) => (
-              <div className="" key={product._id}>
+              <div className="mx-auto" key={product._id}>
                 <ProductCard {...product} />
               </div>
             ))}
@@ -128,7 +131,7 @@ const Products = () => {
               No Data found
             </div>
           )}
-          <Flex justify="center" align="middle" className="mb-4">
+          <Flex justify="center" align="middle" className="flex-wrap gap-4 mb-4">
             <Pagination
               current={currentPage}
               pageSize={limit}
@@ -148,8 +151,8 @@ const Products = () => {
               ))}
             </Select>
           </Flex>
-        </Content>
-      </Layout>
+        </div>
+      </div>
     </div>
   );
 };
