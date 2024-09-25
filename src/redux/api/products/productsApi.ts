@@ -1,4 +1,12 @@
+import { ProductDataType } from "../../../types/dataType";
 import { baseApi } from "../baseApi";
+
+
+interface GetProductsResponse {
+  data: ProductDataType[];
+  length: number | null 
+}
+
 
 const productsApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -12,11 +20,17 @@ const productsApi = baseApi.injectEndpoints({
       invalidatesTags: ['Products']
     }),
     getProducts: builder.query({
-      query: () => ({
-        url: "/products",
+      query: (queryUrl) => ({
+        url: `/products?${queryUrl}`,
         method: "GET",
       }),
-      providesTags: ['Products']
+      providesTags: ['Products'],
+      transformResponse: (response: GetProductsResponse) => {
+        return {
+          data: response.data as ProductDataType[],
+          length: response.length
+        }
+      },
     }),
     deleteProducts: builder.mutation({
       query: (id) => ({

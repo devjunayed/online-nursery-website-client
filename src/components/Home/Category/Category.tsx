@@ -4,7 +4,6 @@ import { CategoryDataType } from "../../Dashboard/Category/ManageCategory";
 
 const Category = () => {
   const { data: categories, isLoading } = useGetCategoryQuery("");
-  console.log(categories);
 
   if (isLoading) {
     return <div>Loading...</div>;

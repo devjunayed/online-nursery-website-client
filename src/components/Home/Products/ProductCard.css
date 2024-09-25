@@ -1,0 +1,75 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.cards{
+    justify-content: center;
+    gap: 10px;
+    display: flex;
+    flex-wrap: wrap;
+}
+.card-container{
+    width: 250px;
+    padding: 10px 12px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 3px 3px 20px 0px #eee;
+
+}
+.card-container > .img-badge{
+    position: relative;
+}
+.card-container > .img-badge > img{
+    width: 100%;
+    border-radius: 17px;
+}
+.card-badge-container{
+    position: relative;
+}
+.card-badge-wrapper{
+    display: inline-block ;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    padding: 5px;
+    background-color: white;
+    border-radius: 0px 20px;
+}
+.card-badge-wrapper::before{
+    content: "";
+    position: absolute;
+    top: -20px;
+    left: 0;
+    background-color: transparent;
+    width: 20px;
+    height: 20px;
+    border-bottom-left-radius: 10px;
+    box-shadow: -9px -0px 0px 0px white;
+}
+.card-badge-wrapper::after{
+    content: "";
+    position: absolute;
+    bottom: 4px;
+    right: -20px;
+    background-color: transparent;
+    width: 20px;
+    height: 20px;
+    border-bottom-left-radius: 10px;
+    box-shadow: -3px 7px 1px 0px white;
+
+}
+.card-badge-wrapper .card-badge{
+    padding: 5px 10px;
+    background-color: white;
+    display: inline-block;
+    border-radius: 20px;
+    border: 1px solid gray;
+}
+.content{
+    margin: 10px;
+}
+h2{
+    margin-bottom: 5px;
+}

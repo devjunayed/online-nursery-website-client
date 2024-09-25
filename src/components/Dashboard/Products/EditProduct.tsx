@@ -67,6 +67,7 @@ const EditProducts = ({ data, refetch }: EditProductsProps) => {
       title: data.title,
       description: data.description,
       price: data.price,
+      quantity: data.quantity,
       category: data.category,
     });
 

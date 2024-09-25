@@ -35,7 +35,7 @@ const CreateProducts: React.FC = () => {
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [fileList, setFileList] = useState<UploadFile[]>([]);
-  const [rating, setRating] = useState(5);
+  const [rating, setRating] = useState("5");
 
   const handlePreview = async (file: UploadFile) => {
     if (!file.url && !file.preview) {
@@ -138,7 +138,7 @@ const CreateProducts: React.FC = () => {
   };
 
   const handleRating = (value: number) => {
-    setRating(value);
+    setRating(value.toString());
   };
 
   return (
@@ -212,7 +212,7 @@ const CreateProducts: React.FC = () => {
         <Form.Item name="rating" label="Rating">
           <Flex gap="middle" vertical>
             <Flex gap="middle">
-              <Rate defaultValue={rating} allowHalf onChange={handleRating} />
+              <Rate defaultValue={Number(rating)} allowHalf onChange={handleRating} />
             </Flex>
           </Flex>
         </Form.Item>

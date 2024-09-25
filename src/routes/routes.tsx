@@ -1,12 +1,13 @@
 import { createBrowserRouter } from "react-router-dom";
 import Home from "../pages/Home/Home";
-import Products from "../pages/Products/Products";
 import MainLayout from "../layout/MainLayout";
 import DashboardLayout from "../layout/DashboardLayout";
 import CreateCategory from "../components/Dashboard/Category/CreateCategory";
 import ManageCategory from "../components/Dashboard/Category/ManageCategory";
 import CreateProducts from "../components/Dashboard/Products/CreateProducts";
 import ManageProduct from "../components/Dashboard/Products/ManageProduct";
+import ProductsPage from "../pages/ProductsPage/ProductsPage";
+import ProductDetailPage from "../pages/ProductDetailPage/ProductDetailPage";
 
 const router = createBrowserRouter([
     {
@@ -19,7 +20,12 @@ const router = createBrowserRouter([
             },
             {
                 path: '/products',
-                element: <Products />
+                element: <ProductsPage />
+            },
+            {
+                path: '/products/:id',
+                element: <ProductDetailPage />,
+                loader: ({params}) => params
             }
         ]
     },

@@ -11,7 +11,9 @@ const { Column } = Table;
 
 
 const ManageProduct: React.FC = () => {
-  const { data = [], isLoading, isError, refetch } = useGetProductsQuery("");
+  const { data , isLoading, isError, refetch } = useGetProductsQuery("");
+  const products = data?.data || [];
+  console.log(products);
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -22,7 +24,7 @@ const ManageProduct: React.FC = () => {
   }
 
   return (
-    <Table dataSource={data?.data} className="overflow-x-auto">
+    <Table dataSource={products} className="overflow-x-auto">
       <Column
         title="No."
         key="serial"
