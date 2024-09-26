@@ -19,7 +19,7 @@ const Products = () => {
   const { Search } = Input;
 
   const { data: categories } = useGetCategoryQuery("");
-  const { data: productsData, refetch: refetchProducts } =
+  const { data: productsData, refetch: refetchProducts, error, isLoading, isFetching } =
     useGetProductsQuery(queryUrl);
 
   const products = productsData?.data || [];
@@ -90,6 +90,14 @@ const Products = () => {
   }, [queryUrl, refetchProducts]);
 
   const perPageOptions = [5, 10, 20, 50];
+
+  if (isLoading || isFetching) {
+    return <div className="text-center  text-green my-10">Loading...</div>;
+  }
+
+  if(error && !isFetching){
+    refetchProducts();
+  }
 
   return (
     <div>

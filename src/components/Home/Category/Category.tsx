@@ -3,15 +3,19 @@ import { Image } from "antd";
 import { CategoryDataType } from "../../Dashboard/Category/ManageCategory";
 
 const Category = () => {
-  const { data: categories, isLoading, isFetching } = useGetCategoryQuery("");
+  const { data: categories, isLoading, isFetching, error, refetch } = useGetCategoryQuery("");
 
   if (isLoading || isFetching) {
     return <div className="text-center  text-green my-10">Loading...</div>;
   }
+
+  if(error && !isFetching && !isLoading){
+    refetch();
+  }
   return (
     <div className="grid grid-cols-1  md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4  gap-8 ">
-      {categories?.map((category: CategoryDataType) => (
-        <div className=" flex flex-col items-center justify-center">
+      {categories?.map((category: CategoryDataType, index) => (
+        <div key={index} className="  flex flex-col items-center justify-center">
           <Image
             preview={false}
             className="drop-shadow-2xl w-full h-full rounded-lg"

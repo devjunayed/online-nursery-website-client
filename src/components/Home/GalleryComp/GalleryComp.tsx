@@ -10,10 +10,12 @@ type ImageType = {
 };
 
 export default function GalleryComp() {
-  const { data } = useGetProductsQuery("");
+  const { data, isFetching, isLoading, error, refetch } = useGetProductsQuery("");
   const [images, setImages] = useState<ImageType[]>([]);
   const productData = data?.data || [];
-  
+
+ 
+
   useEffect(() => {
     if (productData.length > 0) {
       const newImages: ImageType[] = [];
@@ -31,6 +33,14 @@ export default function GalleryComp() {
       setImages(newImages); 
     }
   }, [productData]);
+
+  if (isLoading || isFetching) {
+    return <div className="text-center  text-green my-10">Loading...</div>;
+  }
+
+  if(error && !isFetching){
+    refetch();
+  }
 
   return (
     <div>

@@ -62,7 +62,6 @@ const DashboardMenu: React.FC = () => {
 
   const toggleCollapsed = () => {
     setCollapsed(!collapsed);
-    console.log({babyIamcumming: 'oh yeah'})
   };
 
   const {
@@ -70,7 +69,6 @@ const DashboardMenu: React.FC = () => {
   } = theme.useToken();
 
   return (
-    // for changing theme color of ant design
       <Layout>
         <Content>
           <Layout
@@ -83,12 +81,12 @@ const DashboardMenu: React.FC = () => {
             <Sider
               style={{ background: colorBgContainer }}
               width={200}
-              // collapsible
+              
               collapsed={collapsed}
-              breakpoint="md" // Collapse when the device width is smaller than 'md' (768px)
+              breakpoint="md" 
               onBreakpoint={(broken) => {
-                setIsMobile(broken); // Set mobile mode based on breakpoint
-                setCollapsed(broken); // Collapse the menu when in mobile view
+                setIsMobile(broken); 
+                setCollapsed(broken); 
               }}
               onCollapse={(collapse) => setCollapsed(collapse)}
             >
@@ -103,7 +101,7 @@ const DashboardMenu: React.FC = () => {
               <Menu
                 mode="inline"
                 defaultSelectedKeys={["1"]}
-                defaultOpenKeys={["sub1"]}
+                defaultOpenKeys={["sub2"]}
                 inlineCollapsed={collapsed}
                 style={{
                   height: "100%",
