@@ -7,4 +7,5 @@ export interface ProductDataType {
   quantity: string;
   category: string;
   description: string;
+  productId?: string
 }

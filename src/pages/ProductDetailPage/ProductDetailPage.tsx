@@ -1,6 +1,6 @@
-import {  useLoaderData, useNavigate } from "react-router-dom";
+import { useLoaderData, useNavigate } from "react-router-dom";
 import { useGetProductsQuery } from "../../redux/api/products/productsApi";
-import { Button, Divider,  Input, message, Rate } from "antd";
+import { Button, Divider, Input, message, Rate } from "antd";
 import { ArrowLeftOutlined, ShoppingCartOutlined } from "@ant-design/icons";
 import { useState } from "react";
 import { useCreateCartMutation } from "../../redux/api/cart/cartApi";
@@ -12,8 +12,6 @@ const ProductDetailPage = () => {
   const [createCart] = useCreateCartMutation();
   const [messageApi, contextHolder] = message.useMessage();
   const navigate = useNavigate();
-
-
 
   if (!data?.data || data?.data.length === 0 || data?.data[0] === undefined) {
     return (
@@ -30,41 +28,46 @@ const ProductDetailPage = () => {
     setOrderAmount(orderAmount - 1);
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement> ) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setOrderAmount(parseInt(e.target.value));
   };
 
   const handleAddToCart = async () => {
-    const product = {...data.data[0]};
+    const product = { ...data.data[0] };
     product.quantity = orderAmount.toString();
-
 
     const cartResult = await createCart(product);
     console.log(cartResult);
 
-    if(cartResult?.data.success){
-        messageApi.open({
-            type: 'success',
-            content: "Product added to the cart"
-        })
-        refetch();
-    }else{
-        messageApi.open({
-            type: 'error',
-            content: cartResult.data.message
-        })
+    if (cartResult?.data.success) {
+      messageApi.open({
+        type: "success",
+        content: "Product added to the cart",
+      });
+      refetch();
+    } else {
+      messageApi.open({
+        type: "error",
+        content: cartResult.data.message,
+      });
     }
-  }
+  };
 
   const { title, description, quantity, price, category, image, rating } =
     data?.data[0] || {};
 
   return (
     <div>
-        {contextHolder}
-        <Button onClick={()=> navigate(-1)} type="primary" className="mt-4 ml-2 flex gap-2" ><ArrowLeftOutlined /> Back</Button>
+      {contextHolder}
+      <Button
+        onClick={() => navigate(-1)}
+        type="primary"
+        className="mt-4 ml-2 flex gap-2"
+      >
+        <ArrowLeftOutlined /> Back
+      </Button>
 
-        {/*content  */}
+      {/*content  */}
       <div className="w-full my-6 min-h-screen">
         <div className="flex justify-between items-center gap-10 flex-col lg:flex-row">
           <div className="lg:w-1/2 w-full mx-auto ">

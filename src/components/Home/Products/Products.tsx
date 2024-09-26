@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Flex, Input, Rate, Select, Pagination, Divider } from "antd";
 import { useGetCategoryQuery } from "../../../redux/api/category/categoryApi";
 import { CategoryDataType } from "../../Dashboard/Category/ManageCategory";

@@ -1,9 +1,14 @@
-import { Button } from "antd";
-import { useGetCartQuery } from "../../redux/api/cart/cartApi";
+import { Button, message } from "antd";
+import {
+  useDeleteCartMutation,
+  useGetCartQuery,
+} from "../../redux/api/cart/cartApi";
 import { ProductDataType } from "../../types/dataType";
 
 const CartPage = () => {
-  const { data: cartData } = useGetCartQuery("");
+  const { data: cartData, refetch } = useGetCartQuery("");
+  const [deleteCart] = useDeleteCartMutation();
+  const [messageApi, contextHolder] = message.useMessage();
 
   if (cartData?.data?.length <= 0 || cartData === undefined) {
     return (
@@ -12,6 +17,25 @@ const CartPage = () => {
       </div>
     );
   }
+  const handleDelete = async (e: React.MouseEvent<HTMLElement>, id: string) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const deleteResult = await deleteCart(id);
+
+    if (deleteResult?.data.success) {
+      messageApi.open({
+        type: "success",
+        content: "Item removed from the cart",
+      });
+      refetch();
+    } else {
+      messageApi.open({
+        type: "error",
+        content: deleteResult.data.message,
+      });
+    }
+  };
 
   const grandTotal = cartData.data.reduce(
     (acc: number, { quantity, price }: ProductDataType) =>
@@ -21,6 +45,7 @@ const CartPage = () => {
 
   return (
     <div>
+      {contextHolder}
       <div className="mb-4">
         <div className="flex justify-between gap-4 my-4">
           <div className="flex justify-end   bg-zinc-100  px-4 py-2 rounded">
@@ -40,47 +65,56 @@ const CartPage = () => {
             <span className="w-1/12">Actions</span>
           </div>
           <div className="md:block justify-center flex flex-wrap">
-            {cartData?.data.map(
-              (
-                { _id, title, image, quantity, price }: ProductDataType,
-                index: number
-              ) => (
+            {cartData?.data.map((cart: ProductDataType, index: number) => {
+              const { _id, title, image, quantity, price, productId } = cart;
+              return (
                 <>
-                  <div
+                  <a
+                    href={`/products/${productId}`}
                     className="md:flex w-full shadow-md p-4 hidden justify-center text-center items-center gap-4"
                     key={_id}
                   >
-                    <img className="size-10 " src={image} alt={title} />
-                    <h2 className="w-5/12">{title}</h2>
-                    <h4 className="w-1/12">{quantity}</h4>
-                    <h4 className="w-2/12">{price} &#2547;</h4>
-                    <h4 className="w-2/12">
-                      {Number(price) * Number(quantity)} &#2547;
-                    </h4>
-                    <h4 className="w-1/12 text-red-600 font-Logo">x</h4>
-                  </div>
+                  
+                      <img className="size-10 " src={image} alt={title} />
+                      <h2 className="w-5/12">{title}</h2>
+                      <h4 className="w-1/12">{quantity}</h4>
+                      <h4 className="w-2/12">{price} &#2547;</h4>
+                      <h4 className="w-2/12">
+                        {Number(price) * Number(quantity)} &#2547;
+                      </h4>
+                      <Button
+                        onClick={(e) => handleDelete(e, _id)}
+                        className="w-1/12 text-red-600 font-Logo"
+                      >
+                        x
+                      </Button>
+                  </a>
 
                   <div
-                    className="mx-auto relative md:hidden shadow-xl p-6 w-[200px]"
+                    className="mx-auto m-6 relative md:hidden shadow-xl p-6 w-[200px]"
                     key={`${_id}${index}`}
                   >
-                    <button className="text-red-600 absolute top-4 right-4 font-Logo">
-                      X
-                    </button>
-                    <img className="w-9/12 mx-auto" src={image} alt={title} />
-                    <h3 className="font-bold text-xl">{title}</h3>
+                    <a href={`/products/${productId}`}>
+                      <div className=" absolute top-0 right-0 font-Logo">
+                        <Button onClick={(e) => handleDelete(e, _id)}>X</Button>
+                      </div>
+                      <img className="w-9/12 mx-auto" src={image} alt={title} />
+                      <h3 className="font-bold text-xl">{title}</h3>
 
-                    <h3>
-                      {quantity} x {price} &#2547; ={" "}
-                      {Number(quantity) * Number(price)} &#2547;
-                    </h3>
+                      <h3>
+                        {quantity} x {price} &#2547; ={" "}
+                        {Number(quantity) * Number(price)} &#2547;
+                      </h3>
+                    </a>
                   </div>
                 </>
-              )
-            )}
+              );
+            })}
           </div>
         </div>
-        <div className="flex justify-center items-center mt-10"><Button type="primary">Proceed To Checkout</Button></div>
+        <div className="flex justify-center items-center mt-10">
+          <Button type="primary">Proceed To Checkout</Button>
+        </div>
       </div>
     </div>
   );

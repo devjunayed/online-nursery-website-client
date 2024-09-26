@@ -1,18 +1,39 @@
-import { Button, Image, Rate } from "antd";
+import { Button, Image, message, Rate } from "antd";
 import { ProductDataType } from "../../../types/dataType";
 import { Link } from "react-router-dom";
+import { useCreateCartMutation } from "../../../redux/api/cart/cartApi";
 
-const ProductCard = ({
-  _id,
-  title,
-  image,
-  quantity,
-  category,
-  rating,
-  price,
-}: ProductDataType) => {
+const ProductCard = (productData: ProductDataType) => {
+  const [createCart] = useCreateCartMutation();
+  const [messageApi, contextHolder] = message.useMessage();
+
+
+  const { _id, title, image, quantity, category, rating, price } = productData;
+
+  const handleAddToCart = async () => {
+    const product = {...productData}
+    product.quantity = '1';
+
+
+    const cartResult = await createCart(product);
+    console.log(cartResult);
+
+    if(cartResult?.data.success){
+        messageApi.open({
+            type: 'success',
+            content: "Product added to the cart"
+        })
+    }else{
+        messageApi.open({
+            type: 'error',
+            content: cartResult.data.message
+        })
+    }
+  }
+
   return (
     <div className="w-full ">
+      {contextHolder}
       <div className="card-container">
         <div className="img-badge">
           <Image height={200} width="100%" src={image} alt={title} />
@@ -43,7 +64,7 @@ const ProductCard = ({
             <Button type="primary">
               <Link to={`/products/${_id}`}>View Deatils</Link>
             </Button>
-            <Button type="dashed">Add to Cart</Button>
+            <Button onClick={handleAddToCart} type="dashed">Add to Cart</Button>
           </div>
         </div>
       </div>
