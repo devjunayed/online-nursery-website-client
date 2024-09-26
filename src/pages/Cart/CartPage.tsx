@@ -4,19 +4,20 @@ import {
   useGetCartQuery,
 } from "../../redux/api/cart/cartApi";
 import { ProductDataType } from "../../types/dataType";
+import { useDispatch } from "react-redux";
+import { setCartSummary } from "../../redux/features/cartSlice";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 const CartPage = () => {
   const { data: cartData, refetch } = useGetCartQuery("");
   const [deleteCart] = useDeleteCartMutation();
   const [messageApi, contextHolder] = message.useMessage();
+  const dispatch = useDispatch();
+  const [grandTotal, setGrandTotal] = useState();
 
-  if (cartData?.data?.length <= 0 || cartData === undefined) {
-    return (
-      <div className="mx-auto text-center my-20 text-green text-xl">
-        No Data Found
-      </div>
-    );
-  }
+
+
   const handleDelete = async (e: React.MouseEvent<HTMLElement>, id: string) => {
     e.preventDefault();
     e.stopPropagation();
@@ -37,11 +38,29 @@ const CartPage = () => {
     }
   };
 
-  const grandTotal = cartData.data.reduce(
-    (acc: number, { quantity, price }: ProductDataType) =>
-      acc + Number(quantity) * Number(price),
-    0
-  );
+  
+
+  useEffect(() => {
+    if (cartData?.data) {
+      const grandTotal = cartData.data.reduce(
+        (acc: number, { quantity, price }: ProductDataType) =>
+          acc + Number(quantity) * Number(price),
+        0
+      );
+  
+      setGrandTotal(grandTotal);
+      dispatch(setCartSummary({ cartData: cartData.data, grandTotal }));
+    }
+  }, [cartData, dispatch]);
+  
+
+  if (cartData?.data?.length <= 0 || cartData === undefined) {
+    return (
+      <div className="mx-auto text-center my-20 text-green text-xl">
+        No Data Found
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -69,32 +88,31 @@ const CartPage = () => {
               const { _id, title, image, quantity, price, productId } = cart;
               return (
                 <>
-                  <a
-                    href={`/products/${productId}`}
+                  <Link
+                    to={`/products/${productId}`}
                     className="md:flex w-full shadow-md p-4 hidden justify-center text-center items-center gap-4"
                     key={_id}
                   >
-                  
-                      <img className="size-10 " src={image} alt={title} />
-                      <h2 className="w-5/12">{title}</h2>
-                      <h4 className="w-1/12">{quantity}</h4>
-                      <h4 className="w-2/12">{price} &#2547;</h4>
-                      <h4 className="w-2/12">
-                        {Number(price) * Number(quantity)} &#2547;
-                      </h4>
-                      <Button
-                        onClick={(e) => handleDelete(e, _id)}
-                        className="w-1/12 text-red-600 font-Logo"
-                      >
-                        x
-                      </Button>
-                  </a>
+                    <img className="size-10 " src={image} alt={title} />
+                    <h2 className="w-5/12">{title}</h2>
+                    <h4 className="w-1/12">{quantity}</h4>
+                    <h4 className="w-2/12">{price} &#2547;</h4>
+                    <h4 className="w-2/12">
+                      {Number(price) * Number(quantity)} &#2547;
+                    </h4>
+                    <Button
+                      onClick={(e) => handleDelete(e, _id)}
+                      className="w-1/12 text-red-600 font-Logo"
+                    >
+                      x
+                    </Button>
+                  </Link>
 
                   <div
                     className="mx-auto m-6 relative md:hidden shadow-xl p-6 w-[200px]"
                     key={`${_id}${index}`}
                   >
-                    <a href={`/products/${productId}`}>
+                    <Link to={`/products/${productId}`}>
                       <div className=" absolute top-0 right-0 font-Logo">
                         <Button onClick={(e) => handleDelete(e, _id)}>X</Button>
                       </div>
@@ -105,7 +123,7 @@ const CartPage = () => {
                         {quantity} x {price} &#2547; ={" "}
                         {Number(quantity) * Number(price)} &#2547;
                       </h3>
-                    </a>
+                    </Link>
                   </div>
                 </>
               );
@@ -113,7 +131,9 @@ const CartPage = () => {
           </div>
         </div>
         <div className="flex justify-center items-center mt-10">
-          <Button type="primary">Proceed To Checkout</Button>
+          <Link to="/checkout">
+            <Button type="primary">Proceed To Checkout</Button>
+          </Link>
         </div>
       </div>
     </div>

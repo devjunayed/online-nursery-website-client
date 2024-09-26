@@ -4,7 +4,7 @@ import {
   ShoppingCartOutlined,
 } from "@ant-design/icons";
 import { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { useGetCartQuery } from "../../../redux/api/cart/cartApi";
 
 const Navbar = () => {
@@ -77,10 +77,10 @@ const Navbar = () => {
           </div>
         </div>
         <div className="">
-          <a href="/cart" className="block relative">
+          <Link to="/cart" className="block relative">
             <ShoppingCartOutlined />
             <span className="absolute -top-2 -right-3 text-xs">{cartData?.data?.length}</span>
-          </a>
+          </Link>
         </div>
       </div>
     </>
