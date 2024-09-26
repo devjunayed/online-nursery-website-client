@@ -8,6 +8,7 @@ import CreateProducts from "../components/Dashboard/Products/CreateProducts";
 import ManageProduct from "../components/Dashboard/Products/ManageProduct";
 import ProductsPage from "../pages/ProductsPage/ProductsPage";
 import ProductDetailPage from "../pages/ProductDetailPage/ProductDetailPage";
+import CartPage from "../pages/Cart/CartPage";
 
 const router = createBrowserRouter([
     {
@@ -26,6 +27,10 @@ const router = createBrowserRouter([
                 path: '/products/:id',
                 element: <ProductDetailPage />,
                 loader: ({params}) => params
+            },
+            {
+                path: '/cart',
+                element: <CartPage />,
             }
         ]
     },

@@ -45,6 +45,7 @@ const Navbar = () => {
               {!menu ? <MenuOutlined /> : <CloseOutlined />}
             </div>
             <ul
+            onClick={handleMenu} 
               className={`${
                 menu ? "translate-x-0 transition-transform duration-500 ease-in-out" : "-translate-x-[500rem] transition-none"
               } transform text-white bg-[#60A83B] menu menu-sm dropdown-content rounded z-[1] mt-3 w-52 p-2 shadow`}
@@ -63,7 +64,7 @@ const Navbar = () => {
           <div className="navbar-start hidden lg:flex">
             <ul className="menu menu-horizontal px-1">
               {links.map((link) => (
-                <li key={link?.path} className="hover:cursor-pointer">
+                <li  key={link?.path} className="hover:cursor-pointer">
                   <NavLink
                     className="hover:cursor-pointer text-white font-bold"
                     to={link?.path}
@@ -76,7 +77,7 @@ const Navbar = () => {
           </div>
         </div>
         <div className="">
-          <a href="" className="block relative">
+          <a href="/cart" className="block relative">
             <ShoppingCartOutlined />
             <span className="absolute -top-2 -right-3 text-xs">{cartData?.data?.length}</span>
           </a>

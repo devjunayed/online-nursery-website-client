@@ -63,18 +63,21 @@ const ProductDetailPage = () => {
     <div>
         {contextHolder}
         <Button onClick={()=> navigate(-1)} type="primary" className="mt-4 ml-2 flex gap-2" ><ArrowLeftOutlined /> Back</Button>
-      <div className="hero w-full  min-h-screen">
-        <div className="hero-content md:gap-8 flex-col lg:flex-row">
-          <div className="lg:w-1/2 w-full">
-            <img src={image} className="w-full rounded-lg " />
+
+        {/*content  */}
+      <div className="w-full my-6 min-h-screen">
+        <div className="flex justify-between items-center gap-10 flex-col lg:flex-row">
+          <div className="lg:w-1/2 w-full mx-auto ">
+            <img src={image} className="w-full h-full rounded-lg " />
           </div>
-          <div className="flex flex-col lg:w-1/2 ">
+          {/* texts */}
+          <div className="lg:w-1/2 flex flex-col  ">
             <h1 className="text-2xl font-bold">{title}</h1>
             <h3 className="text-lg">{category}</h3>
             <Rate count={5} defaultValue={Number(rating)} />
             <p className="py-6">{description}</p>
 
-            <div className="font-semibold text-xl flex justify-between">
+            <div className="font-semibold text-xl mr-10 flex justify-between">
               <p>&#2547; {price} </p>
               <p className="text-base"> {quantity} In Stock</p>
             </div>
