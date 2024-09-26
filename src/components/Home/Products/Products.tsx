@@ -1,6 +1,4 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { Flex, Input, Rate, Select, Pagination, Divider } from "antd";
-
 import { useGetCategoryQuery } from "../../../redux/api/category/categoryApi";
 import { CategoryDataType } from "../../Dashboard/Category/ManageCategory";
 import { useState, useEffect } from "react";
@@ -15,16 +13,16 @@ const Products = () => {
   const [selectedRating, setSelectedRating] = useState<number | null>(null);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [limit, setLimit] = useState<number>(10);
+  const [sortBy, setSortBy] = useState<string | null>(null); // Add sortBy state
+  const [sortOrder, setSortOrder] = useState<string>("asc"); // Add sortOrder state
   const { Search } = Input;
 
   const { data: categories } = useGetCategoryQuery("");
   const { data: productsData, refetch: refetchProducts } =
     useGetProductsQuery(queryUrl);
 
-  const products = productsData?.data || []; // Adjust based on your API response structure
-  const totalCount = productsData?.length || 0; // Make sure your API returns total count
-
-  console.log(totalCount);
+  const products = productsData?.data || [];
+  const totalCount = productsData?.length || 0;
 
   const updateQueryUrl = () => {
     const queryParams = new URLSearchParams();
@@ -35,6 +33,10 @@ const Products = () => {
     if (selectedRating) {
       queryParams.append("rating", selectedRating.toString());
     }
+    if (sortBy) {
+      queryParams.append("sortBy", sortBy); // Add sortBy to query
+    }
+    queryParams.append("sortOrder", sortOrder); // Add sortOrder to query
     queryParams.append("page", (currentPage - 1).toString());
     queryParams.append("limit", limit.toString());
 
@@ -67,9 +69,18 @@ const Products = () => {
     setCurrentPage(1);
   };
 
+  // Handle sorting logic
+  const handleSortByChange = (value: string) => {
+    setSortBy(value);
+  };
+
+  const handleSortOrderChange = (value: string) => {
+    setSortOrder(value);
+  };
+
   useEffect(() => {
     updateQueryUrl();
-  }, [selectedCategory, selectedRating, currentPage, limit]);
+  }, [selectedCategory, selectedRating, currentPage, limit, sortBy, sortOrder]);
 
   useEffect(() => {
     if (queryUrl) {
@@ -90,7 +101,7 @@ const Products = () => {
           onSearch={onSearch}
         />
       </div>
-      <div className="mb-4  lg:flex gap-4">
+      <div className="mb-4 lg:flex gap-4">
         <div>
           <div className="flex flex-col justify-center items-center">
             <div className="text-xl mb-4 mt-4 lg:mb-10 text-bold">
@@ -117,9 +128,34 @@ const Products = () => {
             </div>
           </div>
           <Divider />
+          <div className="flex flex-col justify-center items-center">
+            <div className="text-xl mb-4 mt-4 lg:mb-10 text-bold">Sort by:</div>
+            <div>
+              {/* Sort by field */}
+              <Select
+                placeholder="Sort by"
+                onChange={handleSortByChange}
+                style={{ width: "100%" }}
+              >
+                <Select.Option value="title">Title</Select.Option>
+                <Select.Option value="price">Price</Select.Option>
+              </Select>
+            </div>
+            <div className="mt-4">
+              {/* Sort order */}
+              <Select
+                defaultValue="asc"
+                onChange={handleSortOrderChange}
+                style={{ width: "100%" }}
+              >
+                <Select.Option value="asc">Ascending</Select.Option>
+                <Select.Option value="desc">Descending</Select.Option>
+              </Select>
+            </div>
+          </div>
         </div>
         <div className="mx-auto">
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-4 bg-white pl-4 pt-4 ">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-4 bg-white pl-4 pt-4">
             {products?.map((product: ProductDataType) => (
               <div className="mx-auto" key={product._id}>
                 <ProductCard {...product} />

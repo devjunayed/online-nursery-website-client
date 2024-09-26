@@ -74,7 +74,7 @@ const ProductDetailPage = () => {
           <div className="lg:w-1/2 flex flex-col  ">
             <h1 className="text-2xl font-bold">{title}</h1>
             <h3 className="text-lg">{category}</h3>
-            <Rate count={5} defaultValue={Number(rating)} />
+            <Rate count={5} disabled defaultValue={Number(rating)} />
             <p className="py-6">{description}</p>
 
             <div className="font-semibold text-xl mr-10 flex justify-between">

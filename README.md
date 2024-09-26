@@ -26,12 +26,12 @@ All routes on the website are accessible without authentication.
 ### 3\. Product Browsing 🌿
 
 - **Filtering, Pagination, Sorting, and Searching**: Users can efficiently browse through our product offerings with advanced filtering, pagination for easy navigation across multiple pages of products, sorting options to arrange products by relevance, price, name, etc and robust searching capabilities to quickly find specific items.
-- **Product Details**: Users can view detailed information about a product.
+- **✅✅✅Product Details**: Users can view detailed information about a product.
 
 ### 4\. Shopping Cart 🛒
 
-- **Add to Cart**: Users can add products to their cart by clicking an "Add to Cart" button. If a product is out of stock, it cannot be added to the cart.
-- **Quantity Management**: Duplicate products are not added; instead, the quantity of the existing product is increased. Users cannot add more products than the available quantity in stock
+- **✅✅✅Add to Cart**: Users can add products to their cart by clicking an "Add to Cart" button. If a product is out of stock, it cannot be added to the cart.
+- **✅✅✅Quantity Management**: Duplicate products are not added; instead, the quantity of the existing product is increased. Users cannot add more products than the available quantity in stock
 - **Proceed to Checkout**: Users can proceed to the checkout page from the cart section.
 
 ### 5\. Checkout and Payment 💳
@@ -47,25 +47,25 @@ All routes on the website are accessible without authentication.
 
 - ✅✅✅**Navbar**: Navigation bar with links to various sections and pages.
 - ✅✅✅**Hero Section**: Highlighting the main features or promotions.
-- **Product Search, Filter, and Pagination**: Options for users to refine their product search.
-- **Category Section**: Display different product categories.
-- **Product List**: Display products in card format with image, title, price, rating, and an "Add to Cart" button.
-- **Product Details**: Clicking on a product card navigates to the product details page with comprehensive information including image, title, description, price, rating, Category and an "Add to Cart" button.
-- **Image Gallery**: Showcases images of the products, displayed in a mosaic view (For reference: [https://ps.w.org/photo-gallery/assets/screenshot-5.png?rev=2039606](https://ps.w.org/photo-gallery/assets/screenshot-5.png?rev=2039606) , [https://assets.hongkiat.com/uploads/free-responsive-image-gallery/8-bootstrap-gallery.jpeg](https://assets.hongkiat.com/uploads/free-responsive-image-gallery/8-bootstrap-gallery.jpeg)).
+- **✅✅✅Product Search, Filter, and Pagination**: Options for users to refine their product search.
+- **✅✅✅Category Section**: Display different product categories.
+- **✅✅✅Product List**: Display products in card format with image, title, price, rating, and an "Add to Cart" button.
+- **✅✅✅Product Details**: Clicking on a product card navigates to the product details page with comprehensive information including image, title, description, price, rating, Category and an "Add to Cart" button.
+- **✅✅✅Image Gallery**: Showcases images of the products, displayed in a mosaic view (For reference: [https://ps.w.org/photo-gallery/assets/screenshot-5.png?rev=2039606](https://ps.w.org/photo-gallery/assets/screenshot-5.png?rev=2039606) , [https://assets.hongkiat.com/uploads/free-responsive-image-gallery/8-bootstrap-gallery.jpeg](https://assets.hongkiat.com/uploads/free-responsive-image-gallery/8-bootstrap-gallery.jpeg)).
 - ✅✅✅**Footer**: Additional links and information.
 
 ## 📑Page List
 
-- **Landing Page**: Main page with product search, filtering, pagination, category section, and product list.
-- **Products Page**: Dedicated page with product pagination, filtering, and searching.
-- **Product Details Page**: Detailed information about a specific product.
-- **Checkout/Cart Page**: Displays products added to the cart and allows users to proceed to checkout.
+- **✅✅✅Landing Page**: Main page with product search, filtering, pagination, category section, and product list.
+- **✅✅✅Products Page**: Dedicated page with product pagination, filtering, and searching.
+- **✅✅✅Product Details Page**: Detailed information about a specific product.
+- **✅✅✅Checkout/Cart Page**: Displays products added to the cart and allows users to proceed to checkout.
 - **Payment Page**: Page for handling payments through Stripe.js.
-- **Product and Category Management Page**: Interface for managing products and categories.
+- **✅✅✅Product and Category Management Page**: Interface for managing products and categories.
 
 ## 🗂️State Management
 
-- **Redux**: Use Redux to manage the state for products, categories, cart, and other actions.
+- **✅✅✅Redux**: Use Redux to manage the state for products, categories, cart, and other actions.
 - **Actions and Reducers**: Create actions and reducers for managing state changes.
 
 ## 🎨UI/UX

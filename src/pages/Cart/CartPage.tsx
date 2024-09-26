@@ -1,4 +1,4 @@
-import { Button, Divider } from "antd";
+import { Button } from "antd";
 import { useGetCartQuery } from "../../redux/api/cart/cartApi";
 import { ProductDataType } from "../../types/dataType";
 
@@ -23,15 +23,15 @@ const CartPage = () => {
     <div>
       <div className="mb-4">
         <div className="flex justify-between gap-4 my-4">
-          <div className="flex justify-end  bg-zinc-400 text-white px-4 py-2 rounded">
+          <div className="flex justify-end   bg-zinc-100  px-4 py-2 rounded">
             Grand Total: {grandTotal} &#2547;
           </div>
-          <span className="bg-zinc-400 text-white px-4 py-2 rounded">
+          <span className="bg-zinc-100  px-4 py-2 rounded">
             Total Product: {cartData.data.length}
           </span>
         </div>
         <div className="">
-          <div className="md:flex hidden text-center bg-gray-100 py-1">
+          <div className="md:flex hidden text-center justify-center bg-gray-100 py-1">
             <span>Image</span>
             <span className="w-5/12">Title</span>
             <span className="w-1/12">Quantity</span>
@@ -39,7 +39,6 @@ const CartPage = () => {
             <span className="w-2/12">Total Price</span>
             <span className="w-1/12">Actions</span>
           </div>
-          <Divider />
           <div className="md:block justify-center flex flex-wrap">
             {cartData?.data.map(
               (
