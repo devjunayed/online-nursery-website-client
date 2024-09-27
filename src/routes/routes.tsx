@@ -10,11 +10,13 @@ import ProductsPage from "../pages/ProductsPage/ProductsPage";
 import ProductDetailPage from "../pages/ProductDetailPage/ProductDetailPage";
 import CartPage from "../pages/Cart/CartPage";
 import Checkout from "../pages/Checkout/Checkout";
+import ErrorPage from "../pages/ErrorPage/ErrorPage";
 
 const router = createBrowserRouter([
     {
         path: '/',
         element: <MainLayout />,
+        errorElement: <ErrorPage />,
         children: [
             {
                 path: '/',
@@ -44,6 +46,10 @@ const router = createBrowserRouter([
         path: '/dashboard',
         element: <DashboardLayout />,
         children: [
+            {
+                path: "/dashboard",
+                element: <ManageProduct />
+            },
             {
                 path: '/dashboard/create-products',
                 element: <CreateProducts />
