@@ -10,7 +10,7 @@ type ImageType = {
 };
 
 export default function GalleryComp() {
-  const { data, isFetching, isLoading, error, refetch } = useGetProductsQuery("");
+  const { data, isFetching, isLoading } = useGetProductsQuery("");
   const [images, setImages] = useState<ImageType[]>([]);
   const productData = data?.data || [];
 
@@ -38,9 +38,7 @@ export default function GalleryComp() {
     return <div className="text-center  text-green my-10">Loading...</div>;
   }
 
-  if(error && !isFetching){
-    refetch();
-  }
+  
 
   return (
     <div>

@@ -62,11 +62,11 @@ const Navbar = () => {
 
           {/* Larger device menu */}
           <div className="navbar-start hidden lg:flex">
-            <ul className="menu menu-horizontal px-1">
+            <ul className="flex flex-wrap  gap-4 bg-none menu-horizontal px-1">
               {links.map((link) => (
-                <li  key={link?.path} className="hover:cursor-pointer">
+                <li  key={link?.path} className=" hover:cursor-pointer">
                   <NavLink
-                    className="hover:cursor-pointer text-white font-bold"
+                    className="hover:cursor-pointer bg-none text-white font-bold"
                     to={link?.path}
                   >
                     {link?.text}

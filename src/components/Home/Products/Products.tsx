@@ -14,13 +14,17 @@ const Products = () => {
   const [selectedRating, setSelectedRating] = useState<number | null>(null);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [limit, setLimit] = useState<number>(10);
-  const [sortBy, setSortBy] = useState<string | null>(null); // Add sortBy state
-  const [sortOrder, setSortOrder] = useState<string>("asc"); // Add sortOrder state
+  const [sortBy, setSortBy] = useState<string | null>(null); 
+  const [sortOrder, setSortOrder] = useState<string>("asc"); 
   const { Search } = Input;
 
   const { data: categories } = useGetCategoryQuery("");
-  const { data: productsData, refetch: refetchProducts, error, isLoading, isFetching } =
-    useGetProductsQuery(queryUrl);
+  const {
+    data: productsData,
+    refetch: refetchProducts,
+    isLoading,
+    isFetching,
+  } = useGetProductsQuery(queryUrl);
 
   const products = productsData?.data || [];
   const totalCount = productsData?.length || 0;
@@ -35,9 +39,9 @@ const Products = () => {
       queryParams.append("rating", selectedRating.toString());
     }
     if (sortBy) {
-      queryParams.append("sortBy", sortBy); // Add sortBy to query
+      queryParams.append("sortBy", sortBy); 
     }
-    queryParams.append("sortOrder", sortOrder); // Add sortOrder to query
+    queryParams.append("sortOrder", sortOrder); 
     queryParams.append("page", (currentPage - 1).toString());
     queryParams.append("limit", limit.toString());
 
@@ -70,7 +74,6 @@ const Products = () => {
     setCurrentPage(1);
   };
 
-  // Handle sorting logic
   const handleSortByChange = (value: string) => {
     setSortBy(value);
   };
@@ -91,13 +94,7 @@ const Products = () => {
 
   const perPageOptions = [5, 10, 20, 50];
 
-  if (isLoading || isFetching) {
-    return <div className="text-center  text-green my-10">Loading...</div>;
-  }
-
-  if(error && !isFetching){
-    refetchProducts();
-  }
+ 
 
   return (
     <div>
@@ -140,7 +137,6 @@ const Products = () => {
           <div className="flex flex-col justify-center items-center">
             <div className="text-xl mb-4 mt-4 lg:mb-10 text-bold">Sort by:</div>
             <div>
-              {/* Sort by field */}
               <Select
                 placeholder="Sort by"
                 onChange={handleSortByChange}
@@ -151,7 +147,6 @@ const Products = () => {
               </Select>
             </div>
             <div className="mt-4">
-              {/* Sort order */}
               <Select
                 defaultValue="asc"
                 onChange={handleSortOrderChange}
@@ -164,19 +159,29 @@ const Products = () => {
           </div>
         </div>
         <div className="mx-auto">
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-4 bg-white pl-4 pt-4">
-            {products?.map((product: ProductDataType) => (
-              <div className="mx-auto" key={product._id}>
-                <ProductCard {...product} />
-              </div>
-            ))}
-          </div>
-          {products.length === 0 && (
+          {(isLoading || isFetching) && (
+            <div className="text-center  text-green my-10">Loading...</div>
+          )}
+
+          {(!isLoading || !isFetching) && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-4 bg-white pl-4 pt-4">
+              {products?.map((product: ProductDataType) => (
+                <div className="mx-auto" key={product._id}>
+                  <ProductCard {...product} />
+                </div>
+              ))}
+            </div>
+          )}
+          {!isLoading && products.length === 0 && (
             <div className="text-center text-green text-3xl font-bold bg-white py-24">
               No Data found
             </div>
           )}
-          <Flex justify="center" align="middle" className="flex-wrap gap-4 mb-4">
+          <Flex
+            justify="center"
+            align="middle"
+            className="flex-wrap gap-4 mb-4"
+          >
             <Pagination
               current={currentPage}
               pageSize={limit}

@@ -13,6 +13,7 @@
     height: 1px;
     background-color: white !important;
     position: absolute;
-    bottom: 0;
+    bottom: -2px;
+    left: 0;
 }
 
